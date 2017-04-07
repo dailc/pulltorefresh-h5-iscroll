@@ -7,33 +7,39 @@
 #### `PullToRefresh-Skin-×××`的API
 这些API事每一个下拉刷新对象都有的
 
-* finished 这是一个属性，用来控制当前上拉加载是否可用
-* refresh() 重置状态。譬如上拉加载关闭后需要手动refresh重置finished状态
-* pulldownLoading() 主动触发一个下拉刷新的动画(同时会触发下拉回调)
-* pullupLoading() 主动触发一个上拉加载的动画(同时会触发上拉回调)
-* endPullDownToRefresh() 关闭下拉刷新动画，重置状态
-* endPullUpToRefresh(finished) 关闭上拉加载动画，重置状态，如果finished，则不允许在上拉，除非再次refresh()
+```
+* finished //这是一个属性，用来控制当前上拉加载是否可用
+* refresh() //重置状态。譬如上拉加载关闭后需要手动refresh重置finished状态
+* pulldownLoading() //主动触发一个下拉刷新的动画(同时会触发下拉回调)
+* pullupLoading() //主动触发一个上拉加载的动画(同时会触发上拉回调)
+* endPullDownToRefresh() //关闭下拉刷新动画，重置状态
+* endPullUpToRefresh(finished) //关闭上拉加载动画，重置状态，如果finished，则不允许在上拉，除非再次refresh()
+```
 
 #### `PullToRefresh-Bizlogic-Impl`的API
 生成了业务下拉刷新对象后，又对外封装了一层
 
-* refresh() 触发一次上拉加载(一般搜索中用到，搜索完毕后会刷新页面)
-* pullToRefreshInstance 属性，这个是原始的下拉刷新对象引用(可以使用上述的下拉刷新api)
+```
+* refresh() //触发一次上拉加载(一般搜索中用到，搜索完毕后会刷新页面)
+* pullToRefreshInstance //属性，这个是原始的下拉刷新对象引用(可以使用上述的下拉刷新api)
 * 至于生成业务下拉刷新时需要传入的参数，由于与业务耦合，因此不赘述，详情可以参考源码
+```
 
 #### `PullToRefresh-Core.js`的API
 这个文件的API主要是用来给具体的皮肤类进行继承与实现。
 
-* _initPullToRefreshTipsHook() 在这里初始化生成下拉刷新与上拉加载的提示
-* _pullingHook(deltaY,thresholdHeight) 下拉过程中的钩子函数，方便实现一些渐变动画
-* _pulldownLoaingAnimationHook 下拉刷新的动画
-* _pulldownLoaingAnimationSuccessHook(done,isSuccess) 下拉刷新的成功动画-动画完毕后可能的成功提示,没有的话请直接执行done
-* _pulldownLoaingAnimationEndHook 下拉刷新的动画完成后的回调，可以用来重置状态
-* _pullupLoaingAnimationHook(isFinished) 上拉加载的动画
-* _pullupLoaingAnimationSuccessHook(isFinished) 上拉加载的成功动画-动画完毕后可能的成功提示，或者重置状态
-* _scrollEndHook 滑动完毕后的end回调(这个比较少用到)
-* _enablePullUpHook 允许pullup后的回调
-* _disablePullUpHook 禁止pullup后的回调
+```
+* _initPullToRefreshTipsHook() //在这里初始化生成下拉刷新与上拉加载的提示
+* _pullingHook(deltaY,thresholdHeight) //下拉过程中的钩子函数，方便实现一些渐变动画
+* _pulldownLoaingAnimationHook //下拉刷新的动画
+* _pulldownLoaingAnimationSuccessHook(done,isSuccess) //下拉刷新的成功动画-动画完毕后可能的成功提示,没有的话请直接执行done
+* _pulldownLoaingAnimationEndHook //下拉刷新的动画完成后的回调，可以用来重置状态
+* _pullupLoaingAnimationHook(isFinished) //上拉加载的动画
+* _pullupLoaingAnimationSuccessHook(isFinished) //上拉加载的成功动画-动画完毕后可能的成功提示，或者重置状态
+* _scrollEndHook //滑动完毕后的end回调(这个比较少用到)
+* _enablePullUpHook //允许pullup后的回调
+* _disablePullUpHook //禁止pullup后的回调
+```
 
 ### 源码说明
 
@@ -76,3 +82,6 @@
 因此这里有封装了一层，将通用业务写进去了，进一步减少代码。
 
 当然了，实际情况下可以去根据不同业务修改这个源文件，重新打包。
+
+### 如何自定义实现皮肤
+参考源码中的skin系列，只需要继承核心类，然后实现对应的UI函数即可。
