@@ -437,6 +437,9 @@
 		},
 		//用到了mui的dom
 		endPullUpToRefresh: function(finished) {
+			if(!this.options.up) {
+				return ;
+			}
 			if(finished) {
 				this.finished = true;
 				this.pullUpTipsIcon.innerHTML = this.options.up.contentnomore;

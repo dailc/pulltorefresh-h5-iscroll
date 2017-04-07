@@ -92,10 +92,10 @@
 		_initPullToRefreshTipsHook: function(enablePullDown,enablePullUp) {
 			this._initPocket();
 			if(!enablePullUp) {
-				this.bottomPocket.classList.add(CLASS_HIDDEN);
+				this.bottomPocket&&this.bottomPocket.classList.add(CLASS_HIDDEN);
 			}
 			if(!enablePullDown) {
-				this.topPocket.classList.add(CLASS_HIDDEN);
+				this.topPocket&&this.topPocket.classList.add(CLASS_HIDDEN);
 			}
 		},
 		/**
@@ -252,7 +252,11 @@
 		 * @param {Object} title
 		 */
 		_setCaptionClass: function(isPulldown, caption, title) {
+			if(!this.options.up) {
+				return ;
+			}
 			if(!isPulldown) {
+				
 				switch(title) {
 					case this.options.up.contentdown:
 						caption.className = CLASS_PULL_CAPTION + ' ' + CLASS_PULL_CAPTION_DOWN;

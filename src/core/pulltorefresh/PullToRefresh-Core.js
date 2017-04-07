@@ -104,12 +104,13 @@
 		 */
 		_initParams: function() {
 			//是否支持下拉刷新-只有在顶部才代表可以允许下拉刷新
-			this.enablePullDown = true;
-			this.enablePullUp = true;
+			this.enablePullDown = this.options.down?true:false;
+			this.enablePullUp = this.options.up?true:false;
 			this.finished = false;
 			//实际的下拉刷新距离y轴的距离(这个一般会被下拉刷新动画页面占据)
 			this.offsetY = this.offsetY || 0;
-			this.topHeiht = this.options.down.height;
+			this.topHeiht = (this.options.down&&this.options.down.height)?this.options.down.height:0;
+			
 		},
 
 		/**
@@ -200,11 +201,11 @@
 				return;
 			}
 			//高度阈值
-			var thresholdHeight = this.options.down.height;
+			var thresholdHeight = (this.options.down&&this.options.down.height)?this.options.down.height:0;
 			//TODO: 需要处理一下，如果下拉完成了，要触发刷新动画
 			//如果允许下拉刷新
 			if(this.enablePullDown) {
-
+				
 				if(!this.pulldown && !this.loading && that.directionY == -1 && that.y + this.offsetY >= 0) {
 					//如果没有初始化下拉刷新，并且是下拉，进行初始化
 					this.pulldown = true;
@@ -231,7 +232,7 @@
 			}
 
 			//如果允许上拉加载
-			if(this.enablePullUp) {
+			if(this.enablePullUp&&this.options.up) {
 				//这里要求y的绝对值要大于   阈值和maxY
 				//因为它们都为负，所以就变为小于了
 				//允许上拉加载的情况 
@@ -266,7 +267,7 @@
 			if(self.allowPullDownLoading) {
 				self.pulldownLoading(undefined, self.options.scroll.bounceTime);
 			} else {
-				self._pulldownLoaingAnimationEndHook && self._pulldownLoaingAnimationEndHook();
+				self.enablePullDown&&self._pulldownLoaingAnimationEndHook && self._pulldownLoaingAnimationEndHook();
 			}
 		},
 		/**
@@ -275,7 +276,7 @@
 		 */
 		_handleScrollEnd: function(that) {
 			var self = this;
-			var thresholdHeight = self.options.down.height;
+			var thresholdHeight = (self.options.down&&self.options.down.height)?self.options.down.height:0;
 			//如果y可以看到下拉tips
 			//只要不满足下拉刷新的，就回滚,目前回滚直接通过修改IScroll进行
 			//			if(that.y > -self.offsetY && ((that.y < Math.abs(thresholdHeight - self.offsetY)))) {
@@ -284,12 +285,15 @@
 			//				
 			//			}
 			self._scrollEndHook && self._scrollEndHook();
-			if(!self.loading && self.options.up.isFastLoading) {
+			if(self.enablePullUp&&self.options.up) {
+				if(!self.loading && self.options.up.isFastLoading) {
 
-				if((that.y - self.offsetY - self.options.up.offset) <= (self.scroller.maxScrollY - thresholdHeight)) {
-					self._scrollbottom();
+					if((that.y - self.offsetY - self.options.up.offset) <= (self.scroller.maxScrollY - thresholdHeight)) {
+						self._scrollbottom();
+					}
 				}
 			}
+			
 
 		},
 		/**
@@ -328,6 +332,9 @@
 		 */
 		_endPulldownToRefresh: function(isSuccess) {
 			var self = this;
+			if(!this.options.down) {
+				return;
+			}
 			if(self.loading) {
 				//状态需要重置
 				self.allowPullDownLoading = false;
@@ -404,7 +411,9 @@
 		 */
 		pulldownLoading: function(y, time) {
 			var self = this;
-			
+			if(!this.options.down) {
+				return;
+			}
 			if(self.loading) {
 				return;
 			}
@@ -430,7 +439,7 @@
 		 * @param {Object} time
 		 */
 		pullupLoading: function(callback, x, time) {
-			if(this.options.up) {
+			if(this.enablePullUp&&this.options.up) {
 				if(this.finished) {
 					//如果已经结束,刷新
 					this.refresh(true);

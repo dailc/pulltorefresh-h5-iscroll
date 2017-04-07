@@ -72,10 +72,10 @@
 
 		_checkHidden: function(enablePullDown, enablePullUp) {
 			if(!enablePullUp) {
-				this.bottomPocket.classList.add(CLASS_HIDDEN);
+				this.bottomPocket&&this.bottomPocket.classList.add(CLASS_HIDDEN);
 			}
 			if(!enablePullDown) {
-				this.topPocket.classList.add(CLASS_HIDDEN);
+				this.topPocket&&this.topPocket.classList.add(CLASS_HIDDEN);
 			}
 		},
 

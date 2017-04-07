@@ -3,7 +3,7 @@
 
 各式各样的皮肤。
 
-[下拉刷新皮肤示例](https://dailc.github.io/pullToRefresh-h5-iscroll/examples/html)
+[下拉刷新皮肤示例](https://dailc.github.io/pullToRefresh-h5-iscroll/examples/)
 
 ### 使用
 有两种使用方式:
@@ -20,3 +20,4 @@
 ### 更多说明
 
 [examples目录结构说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/examples/html)
+[源码使用说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/src/)

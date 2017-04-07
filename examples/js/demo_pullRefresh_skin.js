@@ -9,7 +9,7 @@
 	/**
 	 * @description 初始化下拉刷新
 	 */
-	function initPullRefreshList(isAuto) {
+	function initPullRefreshList(isAuto,disablePullDown,disablePullUp) {
 		//以下几个是测试加载更多,没有更多数据功能的
 		//当前页
 		var currpage = 0;
@@ -21,7 +21,7 @@
 		var pullToRefreshObj = pullToRefreshBase.initPullToRefresh({
 			//这里用默认设置
 			element: '#pullrefresh',
-			down: {
+			down: disablePullDown?null:{
 				callback: pullDownRefreshCallback,
 				//是否显示成功动画
 				isSuccessTips: true,
@@ -29,7 +29,7 @@
 			//down为null表示不要下拉刷新
 			//down: null,
 			//上拉有关
-			up: {
+			up: disablePullUp?null:{
 				//是否自动上拉加载-初始化是是否自动
 				auto: isAuto || false,
 
@@ -143,10 +143,10 @@
 
 	}
 	
-	exports.init = function(pullToRefreshObj) {
+	exports.init = function(pullToRefreshObj,disablePullDown,disablePullUp) {
 		pullToRefreshBase = pullToRefreshObj;
 		initSearch();
-		pullToRefreshBiz = initPullRefreshList(true);
+		pullToRefreshBiz = initPullRefreshList(true,disablePullDown,disablePullUp);
 	};
 	
 	window.demoPullToRefresh = exports;
