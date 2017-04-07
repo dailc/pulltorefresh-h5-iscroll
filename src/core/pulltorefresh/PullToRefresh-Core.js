@@ -31,8 +31,8 @@
  */
 (function(exports) {
     var CommonTools = require('CommonTools_Core');
-	//基于IScroll
-	require('PullToRefresh_IScroll_Probe');
+	//基于IScroll 暂时单独剥离IScroll
+	//require('PullToRefresh_IScroll_Probe');
 
 	/**
 	 * 默认的设置参数

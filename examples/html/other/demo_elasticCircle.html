@@ -28,7 +28,7 @@
 			.pie-anim-container {
 				position: relative;
 				width: 100%;
-				margin-top: 100px;
+				
 			}
 			
 			.pie-anim-container .pie {
@@ -270,7 +270,7 @@
 	</head>
 
 	<body>
-		<div class="pie-anim-container">
+		<div class="pie-anim-container" style="margin-top: 100px;width: 100%;">
 
 			<div class="pie">
 				<div class="anim-pie"></div>
@@ -294,13 +294,13 @@
 		<div class="mui-input-row mui-input-range" style="margin-top: 150px;">
 			<input type="range" id='testprogress' value="5" min="0" max="180">
 		</div>
-		<div class="" style="margin-top: 200px;">
-			<button id="refresh-loading">刷新动画</button>
-			<button id="refresh-success">成功动画</button>
-			<button id="refresh-error">错误动画</button>
-			<button id="refresh-end">停止动画</button>
-			<button id="refresh-pulltorefresh-success">一套下拉刷新动画(成功)</button>
-			<button id="refresh-pulltorefresh-error">一套下拉刷新动画(错误)</button>
+		<div class="" style="margin-top: 200px;width: 100%;">
+			<button id="refresh-loading">refresh</button>
+			<button id="refresh-success">success</button>
+			<button id="refresh-error">error</button>
+			<button id="refresh-end">end</button>
+			<button id="refresh-pulltorefresh-success">anim(suucee)</button>
+			<button id="refresh-pulltorefresh-error">anim(error)</button>
 		</div>
 		<script>
 			var pieAnimationUtil = function() {
