@@ -1,0 +1,109 @@
+<!-- 
+        作者：dailc
+        时间：2017-04-05
+        描述：  这个是多个div中的下拉刷新
+        除了 mui-default 其它皮肤都可以生成多个实例
+   	默认使用的 default皮肤  可以自行换为其它皮肤，这里不再重复示例
+   	
+   这里是基于IScroll5的嵌套，而不在是基于mui的IScroll，所有下拉刷新(非mui版)内部都自带IScro理论
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+
+		<title>下拉刷新皮肤 multi Iscroll5</title>
+		<link rel="stylesheet" href="../../css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/common_search.css" />
+		<link rel="stylesheet" href="../../css/demo_pullRefresh_skin_multi_iscroll5.css" />
+
+	</head>
+
+	<body>
+		<!-- fullscreen解决下拉刷新原生不显示问题 -->
+		<div id="slider" class="mui-content mui-slider mui-fullscreen">
+			<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<a id="groupTitle" class="mui-control-item mui-active" >
+					内容1
+				</a>
+				<a id="personTitle" class="mui-control-item control-line-item" >
+					内容2
+				</a>
+
+			</div>
+			
+			<div class="mui-slider-group">
+				<div class="mui-slider-scroll">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div class="mui-scroll-wrapper" id="pullrefresh1">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="listdata1">
+	
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper" id="pullrefresh2">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="listdata2">
+	
+								</ul>
+	
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Default.js"></script>
+	<script type="text/javascript" src="../../js/demo_pullRefresh_multi_skin.js"></script>
+	<script>
+		window.onload = function() {
+			//目前通过改变宽度来横向滑动
+			document.querySelector('#item1mobile').style.width = window.innerWidth +'px';
+			document.querySelector('#item2mobile').style.width = window.innerWidth +'px';
+			document.querySelector('.mui-slider-scroll').style.width = window.innerWidth*2 +'px';
+			//先生成外层IScroll对象
+			var scroller = new IScroll(document.querySelector('.mui-slider-group'), {
+				scrollX: true, 
+				scrollY:false, 
+				momentum: false, 
+				snap:true,
+				tap: true, 
+				eventPassthrough:true
+			});
+			
+			scroller.on('scroll', function() {
+				console.log("scroll:"+this.x+','+this.y);
+			});
+			scroller.on('scrollStart', function() {
+				console.log("scrollStart:"+this.x+','+this.y);
+			});
+			var tab1 = document.getElementById('groupTitle');
+			var tab2 = document.getElementById('personTitle');
+			scroller.on('scrollEnd', function() {
+				console.log("scrollEnd:"+this.x+','+this.y);
+				if(this.x == 0) {
+					//tab1
+					tab1.classList.add('mui-active')
+					tab2.classList.remove('mui-active')
+				} else {
+					//tab2
+					tab1.classList.remove('mui-active')
+					tab2.classList.add('mui-active')
+				}
+			});
+			
+			demoPullToRefresh.init(PullToRefreshSkinDefault);
+			
+		};
+	</script>
+
+</html>

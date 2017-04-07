@@ -1,0 +1,107 @@
+<!-- 
+        作者：dailc
+        时间：2017-04-05
+        描述：  复杂页面下拉刷新，包括了轮播和下拉刷新
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		
+		<title>下拉刷新皮肤 bizlogic-complex</title>
+		<link rel="stylesheet" href="../../css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/common_search.css" />
+		
+
+	</head>
+
+	<body>
+			<!--下拉刷新容器
+					pullrefresh 和 listdata是下拉刷新组件默认的id
+					简单的调用没有必要修改,如果有自定义修改需求的,请参考详细调用
+				-->
+			<div id="pullrefresh" class="mui-scroll-wrapper mui-content pt0">
+				
+				<div class="mui-scroll">
+<div id="gallerySlider">
+    <div class="mui-slider" >
+        <div class="mui-slider-group mui-slider-loop" >
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                <a class="slider-img-item" id="testgallery4">
+                    <img src="../../img/gallery/img_testgallery4.jpg" style="max-height:100%;">
+                </a>
+            </div>
+            <div class="mui-slider-item">
+                <a class="slider-img-item" id="testgallery1">
+                    <img src="../../img/gallery/img_testgallery1.jpg" style="max-height:100%;">
+                </a>
+            </div>
+            <div class="mui-slider-item">
+                <a class="slider-img-item" id="testgallery2">
+                    <img src="../../img/gallery/img_testgallery2.jpg" style="max-height:100%;">
+                </a>
+            </div>
+            <div class="mui-slider-item mui-active">
+                <a class="slider-img-item" id="testgallery3">
+                    <img src="../../img/gallery/img_testgallery3.jpg" style="max-height:100%;">
+                </a>
+            </div>
+            <div class="mui-slider-item">
+                <a class="slider-img-item" id="testgallery4">
+                    <img src="../../img/gallery/img_testgallery4.jpg" style="max-height:100%;">
+                </a>
+            </div>
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                <a class="slider-img-item" id="testgallery1">
+                    <img src="../../img/gallery/img_testgallery1.jpg" style="max-height:100%;">
+                </a>
+            </div>
+        </div>
+        <div class="mui-slider-indicator">
+            <div class="mui-indicator">
+            </div>
+            <div class="mui-indicator">
+            </div>
+            <div class="mui-indicator mui-active">
+            </div>
+            <div class="mui-indicator">
+            </div>
+        </div>
+    </div>
+</div>
+					<!--通用样式1 -->
+						<div class="common-input-row common-input-type1">
+							<div class="common-input ">
+								<span class="btn-search mui-icon mui-icon-search" ></span>
+								<input type="text" class="common-input-clear" placeholder="请输入关键字" id="input-searchName">
+							</div>
+						</div>
+					<ul class="mui-table-view" id="listdata">
+	
+					</ul>
+				</div>
+			</div>			
+		
+	</body>
+	<script type="text/javascript" src="../../js/mui.js" ></script>
+	<script type="text/javascript" src="../../js/mustache.min.js" ></script>
+	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Default.js" ></script>
+	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Bizlogic.Impl.js" ></script>
+	<script type="text/javascript" src="../../js/demo_pullRefresh_bizlogic_impl.js" ></script>
+	<script>
+		
+		window.onload = function() {
+			//生成图片轮播
+			mui('#gallerySlider').slider({
+				interval: 0 //轮播周期，默认为0：不轮播
+			});
+			//下拉刷新中设置了  eventPassthrough: 'horizontal'允许横向滑动
+			demoPullToRefresh.init(PullToRefreshSkinDefault);
+		};
+		
+	</script>
+	
+</html>

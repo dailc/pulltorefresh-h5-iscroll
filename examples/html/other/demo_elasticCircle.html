@@ -1,0 +1,602 @@
+<!-- 
+        作者：dailc 
+        时间：2017-03-30
+        描述：一整套下拉刷新(饼状图，刷新圈，椭圆形变，√状态，×状态等，纯css实现)
+    基于前面的饼状图进一步拓展，也是下拉刷新动画中需要用到的
+-->
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<title></title>
+		<style>
+			html,
+			body {
+				height: 100%;
+				overflow: hidden;
+			}
+			
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 100%;
+			}
+			
+			.pie-anim-container {
+				position: relative;
+				width: 100%;
+				margin-top: 100px;
+			}
+			
+			.pie-anim-container .pie {
+				position: absolute;
+				width: 100px;
+				height: 100px;
+				left: 50%;
+				top: 50%;
+				margin-left: -50px;
+				margin-top: -50px;
+				border-radius: 50%;
+				-webkit-border-radius: 50%;
+				background: currentColor;
+				color: #f2f3f4;
+			}
+			
+			.pie-anim-container .left-pie {
+				display: block;
+				background: currentColor;
+				position: absolute;
+				left: 0;
+				top: 0;
+				height: 100%;
+				border-radius: 100% 0 0 100% / 50%;
+				border-width: 0;
+				width: 50%;
+				transform-origin: left;
+				-webkit-transform-origin: left;
+				-moz-transform-origin: left;
+			}
+			
+			.pie-anim-container .anim-pie {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 50%;
+				height: 100%;
+				display: block;
+				border-width: 0;
+				border-radius: 100% 0 0 100% / 50%;
+				-webkit-border-radius: 100% 0 0 100% / 50%;
+				background: #d00324;
+				transform-origin: right;
+				-webkit-transform-origin: right;
+				-moz-transform-origin: right;
+			}
+			
+			.pie-anim-container .fresh-progress {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 66px;
+				height: 66px;
+				display: block;
+				margin-left: -33px;
+				margin-top: -33px;
+				border: 3px solid transparent;
+				border-radius: 50%;
+				-webkit-border-radius: 50%;
+				border-right-color: white;
+				border-top-color: white;
+				border-left-color: white;
+				border-left: 2px;
+				z-index: 10;
+			}
+			
+			.pie-anim-container .progress-arrow {
+				position: absolute;
+				bottom: 2px;
+				right: 8px;
+				width: 0px;
+				height: 0px;
+				border-top: 6px solid transparent;
+				border-bottom: 6px solid transparent;
+				border-right: 6px solid white;
+				transform: rotate(-40deg);
+				-webkit-transform: rotate(-40deg);
+				-moz-transform: rotate(-40deg);
+			}
+			
+			.pie-anim-container .error-tips {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				margin-left: -14px;
+				margin-top: -22px;
+				opacity: 0;
+			}
+			
+			.pie-anim-container .error-tips .txt {
+				color: white;
+			}
+			
+			.pie-anim-container .error-tips .left.txt {
+				margin-left: -5px;
+			}
+			
+			.pie-anim-container .error-tips .right.txt {
+				margin-left: 10px;
+			}
+			
+			.pie-anim-container .moon {
+				position: absolute;
+				left: -4px;
+				top: 30px;
+				width: 36px;
+				height: 36px;
+				border-radius: 38%;
+				-webkit-border-radius: 38%;
+				box-shadow: 0 -3px 0 0 white;
+				-webkit-box-shadow: 0 -3px 0 0 white;
+			}
+			
+			.pie-anim-container .success-tips {
+				opacity: 0;
+			}
+			
+			.pie-anim-container .arrow-left {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 0px;
+				height: 0px;
+				margin-left: -12px;
+				margin-top: -20px;
+				border-top: 20px solid transparent;
+				border-bottom: 30px solid transparent;
+				border-right: 30px solid white;
+				transform: rotate(-88deg);
+				-webkit-transform: rotate(-88deg);
+				-moz-transform: rotate(-88deg);
+			}
+			
+			.pie-anim-container .arrow-right {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 0px;
+				height: 0px;
+				margin-left: -16px;
+				margin-top: -31px;
+				border-top: 30px solid transparent;
+				border-bottom: 30px solid transparent;
+				border-right: 30px solid #d00324;
+				transform: rotate(-88deg);
+				-webkit-transform: rotate(-88deg);
+				-moz-transform: rotate(-88deg);
+			}
+			
+			@keyframes progressrotate {
+				0% {
+					-webkit-transform: rotateZ(0deg);
+					transform: rotateZ(0deg);
+					-moz-transform: rotate(0deg);
+				}
+				100% {
+					-webkit-transform: rotateZ(360deg);
+					transform: rotateZ(360deg);
+					-moz-transform: rotate(360deg);
+				}
+			}
+			
+			@-webkit-keyframes progressrotate {
+				0% {
+					-webkit-transform: rotateZ(0deg);
+					transform: rotateZ(0deg);
+					-moz-transform: rotate(0deg);
+				}
+				100% {
+					-webkit-transform: rotateZ(360deg);
+					transform: rotateZ(360deg);
+					-moz-transform: rotate(360deg);
+				}
+			}
+			/*pie anim 的 index动画*/
+			
+			@keyframes piebackground {
+				0% {
+					background: #d00324;
+				}
+				100% {
+					background: currentcolor;
+				}
+			}
+			/*需单独兼容webkit内核*/
+			
+			@-webkit-keyframes piebackground {
+				0% {
+					background: #d00324;
+				}
+				100% {
+					background: currentcolor;
+				}
+			}
+			/*pie anim 的 index动画*/
+			
+			@keyframes pieanimaindex {
+				0% {
+					z-index: 10;
+					transform: rotate(360deg);
+					-webkit-transform: rotate(360deg);
+					-moz-transform: rotate(360deg);
+				}
+				50% {
+					z-index: 0;
+					transform: rotate(180deg);
+					-webkit-transform: rotate(180deg);
+					-moz-transform: rotate(180deg);
+				}
+				100% {
+					z-index: 0;
+					transform: rotate(0deg);
+					-webkit-transform: rotate(0deg);
+					-moz-transform: rotate(0deg);
+				}
+			}
+			
+			@-webkit-keyframes pieanimaindex {
+				0% {
+					z-index: 10;
+					transform: rotate(360deg);
+					-webkit-transform: rotate(360deg);
+					-moz-transform: rotate(360deg);
+				}
+				50% {
+					z-index: 0;
+					transform: rotate(180deg);
+					-webkit-transform: rotate(180deg);
+					-moz-transform: rotate(180deg);
+				}
+				100% {
+					z-index: 0;
+					transform: rotate(0deg);
+					-webkit-transform: rotate(0deg);
+					-moz-transform: rotate(0deg);
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="pie-anim-container">
+
+			<div class="pie">
+				<div class="anim-pie"></div>
+				<div class="left-pie"></div>
+			</div>
+			<div class="fresh-progress">
+				<div class="progress-arrow"></div>
+			</div>
+			<div class="success-tips">
+				<div class="arrow-left"></div>
+				<div class="arrow-right"></div>
+			</div>
+			<div class="error-tips">
+				<span class="txt left">×</span>
+				<span class="txt right">×</span>
+				<div class="moon"></div>
+			</div>
+
+		</div>
+
+		<div class="mui-input-row mui-input-range" style="margin-top: 150px;">
+			<input type="range" id='testprogress' value="5" min="0" max="180">
+		</div>
+		<div class="" style="margin-top: 200px;">
+			<button id="refresh-loading">刷新动画</button>
+			<button id="refresh-success">成功动画</button>
+			<button id="refresh-error">错误动画</button>
+			<button id="refresh-end">停止动画</button>
+			<button id="refresh-pulltorefresh-success">一套下拉刷新动画(成功)</button>
+			<button id="refresh-pulltorefresh-error">一套下拉刷新动画(错误)</button>
+		</div>
+		<script>
+			var pieAnimationUtil = function() {
+				var _elementStyle = document.createElement('div').style;
+				/**
+				 * @description 进行浏览器兼容的，补全浏览器兼容前缀
+				 * @param {HTMLElement} dom
+				 * @param {String} style 对应的属性
+				 * @param {String|Number} value 对应的值
+				 * @param {Boolean} isAppend 是否是额外增加
+				 */
+				function _prefixStyle(dom, style, value, isAppend) {
+					if(!dom) {
+						return;
+					}
+					var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
+						transform,
+						i = 0,
+						l = vendors.length;
+
+					for(; i < l; i++) {
+						transform = vendors[i] + 'ransform';
+						if(transform in _elementStyle) {
+							var styleStr = vendors[i].substr(0, vendors[i].length - 1) + style.charAt(0).toUpperCase() + style.substr(1);
+							if(isAppend) {
+								dom.style[styleStr] += value;
+							} else {
+								dom.style[styleStr] = value;
+							}
+
+						};
+					}
+
+				}
+
+				var animPie, pie, leftPie, refreshPregress, successTips, errorTips, oldWith, oldHeight, oldPercent, bgColor, showColor;
+
+				// 0 - 100
+				var setPercent = function(deltaY, thresholdHeight, thresholdScaleHeight) {
+					thresholdScaleHeight = thresholdScaleHeight || 0;
+					//先设置饼状图
+					var percent = (deltaY / thresholdHeight) * 100;
+					//不允许重复设置,只有状态更改时才重置
+					if(percent >= 50 && oldPercent < 50) {
+						//大于一半后，右侧的颜色需要变动
+						pie.style.backgroundColor = showColor;
+						animPie.style.zIndex = 10;
+					} else if(percent < 50 && (oldPercent >= 50 || !oldPercent)) {
+						pie.style.backgroundColor = bgColor;
+						animPie.style.zIndex = 0;
+					}
+					if(percent >= 100 && oldPercent < 100) {
+						leftPie.style.background = showColor;
+					} else if(percent < 100 && (oldPercent >= 100 || !oldPercent)) {
+						leftPie.style.background = bgColor;
+					}
+					var deg = (percent / 100) * 360;
+
+					if(!oldPercent) {
+						//如果是第一次设置
+						_prefixStyle(animPie, 'animation', 'none');
+						_prefixStyle(animPie, 'transitionDuration', '0ms');
+						_prefixStyle(pie, 'animation', 'none');
+						_prefixStyle(pie, 'transitionDuration', '0ms');
+						_prefixStyle(pie, 'borderRadius', '50%');
+					}
+					//需要持续计算的动画
+					_prefixStyle(animPie, 'transform', 'rotate(' + (deg > 360 ? 360 : deg) + 'deg)');
+
+					//需要持续计算的动画
+					if(deltaY <= thresholdHeight) {
+						//重置缩放状态
+
+						refreshPregress.style.opacity = 0;
+						//饼状图的缩放-这时候还没有触发下拉刷新
+						_prefixStyle(pie, 'transform', 'scale(' + percent / 100 + ',' + percent / 100 + ')');
+						_prefixStyle(pie, 'transformOriginY', '50%');
+					} else {
+						//如果可以下拉刷新了，这时候刷新progress要显示
+						_prefixStyle(refreshPregress, 'transform', 'rotateZ(' + deg + 'deg)');
+
+						if(deltaY <= thresholdHeight + thresholdScaleHeight) {
+							//这时候还不需要形变，只需要刷新条显示
+							refreshPregress.style.opacity = (deltaY - thresholdHeight) / 10;
+						} else {
+							//需要形变了，改变pie
+							var diff = deltaY - thresholdHeight - thresholdScaleHeight;
+							var percentX = (oldWith - 0.1 * diff) / oldWith;
+							var percentY = (oldHeight + 1.6 * diff) / oldHeight;
+							if(percentY > 2.5) {
+								percentY = 2.5;
+							}
+							if(percentX < 0.9) {
+								percentX = 0.9;
+							}
+							_prefixStyle(refreshPregress, 'transform', ' scale(' + (1 - diff * 0.002) + ',' + (1 - diff * 0.002) + ')', true);
+							_prefixStyle(pie, 'borderBottomLeftRadius', (50 + 0.1 * diff) + '%');
+							_prefixStyle(pie, 'borderBottomRightRadius', (50 + 0.1 * diff) + '%');
+							_prefixStyle(pie, 'transform', 'scale(' + percentX + ',' + percentY + ')');
+
+							//已经可以下拉刷新了
+							_prefixStyle(pie, 'transformOriginY', '0%');
+						}
+
+					}
+
+					oldPercent = percent;
+				};
+
+				function refresh() {
+					//重置饼图 得重置一些animation
+					_prefixStyle(animPie, 'animation', 'none');
+					animPie.style.zIndex = 10;
+					_prefixStyle(pie, 'animation', 'none');
+					pie.style.backgroundColor = showColor;
+
+					_prefixStyle(pie, 'borderBottomLeftRadius', '50%');
+					_prefixStyle(pie, 'borderBottomRightRadius', '50%');
+					_prefixStyle(pie, 'transform', 'scale(' + 1 + ',' + 1 + ')');
+					_prefixStyle(pie, 'transformOriginY', '50%');
+					_prefixStyle(pie, 'transitionDuration', '300ms');
+					_prefixStyle(pie, 'transitionTimingFunction', 'ease-in');
+
+					//重置progressbar
+					refreshPregress.style.opacity = 1;
+					_prefixStyle(refreshPregress, 'transform', 'scale(' + 1 + ',' + 1 + ')');
+					_prefixStyle(refreshPregress, 'transitionDuration', '300ms');
+					_prefixStyle(refreshPregress, 'transitionTimingFunction', 'ease-in');
+					//一段时间后加上loading动画
+					_prefixStyle(refreshPregress, 'animation', 'progressrotate 700ms ease-in-out  400ms infinite');
+
+					//
+					successTips.style.opacity = 0;
+					_prefixStyle(successTips, 'transitionDuration', '0ms');
+
+					errorTips.style.opacity = 0;
+					_prefixStyle(errorTips, 'transitionDuration', '0ms');
+
+					//重置状态
+					oldPercent = null;
+				}
+
+				//成功函数-重置状态
+				function success() {
+					refreshPregress.style.opacity = 0;
+					successTips.style.opacity = 1;
+					_prefixStyle(successTips, 'transitionDuration', '400ms');
+					_prefixStyle(successTips, 'transitionTimingFunction', 'ease-in');
+
+					//重置状态
+					oldPercent = null;
+				}
+
+				function error() {
+					refreshPregress.style.opacity = 0;
+					errorTips.style.opacity = 1;
+					_prefixStyle(errorTips, 'transitionTimingFunction', 'ease-in');
+					_prefixStyle(errorTips, 'transitionDuration', '400ms');
+
+					//重置状态
+					oldPercent = null;
+				}
+
+				function end() {
+					//重置刷新条与进度条
+					refreshPregress.style.opacity = 0;
+					_prefixStyle(refreshPregress, 'transitionDuration', '0ms');
+					_prefixStyle(refreshPregress, 'animation', 'none');
+
+					successTips.style.opacity = 0;
+					_prefixStyle(successTips, 'transitionDuration', '0ms');
+
+					errorTips.style.opacity = 0;
+					_prefixStyle(errorTips, 'transitionDuration', '0ms');
+
+					//饼状图的缩放-这时候还没有触发下拉刷新
+					_prefixStyle(pie, 'transform', 'scale(' + 0 + ',' + 0 + ')');
+					_prefixStyle(pie, 'transformOriginY', '50%');
+					_prefixStyle(pie, 'transitionDuration', '300ms');
+
+					//下面是饼状图的 进度旋转
+					leftPie.style.background = bgColor;
+					//延迟的时间超过一般
+					_prefixStyle(pie, 'animation', 'piebackground 0ms ease-out 150ms');
+					_prefixStyle(pie, 'animationFillMode', 'forwards');
+
+					//饼状图回复原状,动画里既有index也有rotate
+					//设置为动画结束后状态
+					_prefixStyle(animPie, 'animation', 'pieanimaindex 300ms ease-out');
+					_prefixStyle(animPie, 'animationFillMode', 'forwards');
+
+					//重置状态
+					oldPercent = null;
+
+				}
+
+				//初始化一些参数
+				function init(options) {
+					options = options || {};
+					bgColor = options.bgColor || 'currentColor';
+					showColor = options.showColor || '#d00324';
+
+					var elem = options.elem;
+					if(!elem) {
+						throw new Error('错误，必须有一个elem对象');
+					}
+					if(typeof elem === 'string') {
+						elem = document.querySelector(elem);
+					}
+					animPie = elem.querySelector('.anim-pie'),
+						pie = elem.querySelector('.pie'),
+						leftPie = elem.querySelector('.left-pie'),
+						refreshPregress = elem.querySelector('.fresh-progress'),
+						successTips = elem.querySelector('.success-tips'),
+						errorTips = elem.querySelector('.error-tips');
+					oldWith = pie.offsetWidth;
+					oldHeight = pie.offsetHeight;
+					setTimeout(function() {
+						//重新获取
+						oldWith = pie.offsetWidth;
+						oldHeight = pie.offsetHeight;
+					}, 0)
+					//初始化饼状图
+					_prefixStyle(pie, 'transform', 'scale(' + 0 + ',' + 0 + ')');
+				}
+
+				return {
+					init: init,
+					setPercent: setPercent,
+					refresh: refresh,
+					success: success,
+					error: error,
+					end: end
+				};
+			};
+
+			function pulltorefreshanim(isSuccess) {
+				var deltaY = 0;
+				var gap = 1;
+				var loop = function() {
+					pieAnimObj.setPercent(deltaY, 75, 10);
+					deltaY += gap;
+					if(deltaY >= 180) {
+						//准备刷新动画
+						pieAnimObj.refresh();
+						setTimeout(function() {
+							if(isSuccess) {
+								pieAnimObj.success();
+							} else {
+								pieAnimObj.error();
+							}
+
+							setTimeout(function() {
+								pieAnimObj.end();
+							}, 800);
+						}, 3000);
+					} else {
+						requestAnimationFrame(loop);
+					}
+
+				};
+				loop();
+			}
+			var pieAnimObj;
+			window.onload = function() {
+				pieAnimObj = pieAnimationUtil();
+				pieAnimObj.init({
+					elem: '.pie-anim-container'
+				});
+				document.getElementById('testprogress').addEventListener('input', function() {
+					var value = this.value;
+					pieAnimObj.setPercent(value, 75, 10);
+				});
+				document.getElementById('refresh-loading').addEventListener('click', function() {
+					testprogress.value = 0;
+					pieAnimObj.refresh();
+				});
+				document.getElementById('refresh-success').addEventListener('click', function() {
+					pieAnimObj.success();
+				});
+				document.getElementById('refresh-error').addEventListener('click', function() {
+					pieAnimObj.error()
+				});
+				document.getElementById('refresh-end').addEventListener('click', function() {
+					pieAnimObj.end()
+				});
+
+				document.getElementById('refresh-pulltorefresh-success').addEventListener('click', function() {
+					pulltorefreshanim(true);
+				});
+				document.getElementById('refresh-pulltorefresh-error').addEventListener('click', function() {
+					pulltorefreshanim(false);
+				});
+
+			};
+		</script>
+	</body>
+
+</html>

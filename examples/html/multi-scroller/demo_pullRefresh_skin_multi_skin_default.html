@@ -1,0 +1,80 @@
+<!-- 
+        作者：dailc
+        时间：2017-04-05
+        描述：  这个是多个div中的下拉刷新
+        除了 mui-default 其它皮肤都可以生成多个实例
+   	默认使用的 default皮肤  可以自行换为其它皮肤，这里不再重复示例
+   	
+   	这里用到了嵌套，默认下拉刷新IScroll中的 eventPassthrough:'horizontal' 设为这个值，即可允许外层嵌套横向滑动
+   	这里和mui的有所区别-因为mui都是基于一个IScroll的，可以很方便的进行锁定，而这里考虑的是可以被不同类型的IScroll嵌套
+   	
+   	这个是原始skin的多div
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		
+		<title>下拉刷新皮肤 multi skin多div刷新</title>
+		<link rel="stylesheet" href="../../css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/common_search.css" />
+		<link rel="stylesheet" href="../../css/demo_pullRefresh_skin_bizlogic_multi.css" />
+		
+
+	</head>
+
+	<body>
+			<!-- fullscreen解决下拉刷新原生不显示问题 -->
+			<div id="slider" class="mui-content mui-slider mui-fullscreen">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a id="groupTitle" class="mui-control-item mui-active" href="#item1mobile">
+						内容1
+					</a>
+					<a id="personTitle" class="mui-control-item control-line-item" href="#item2mobile">
+						内容2
+					</a>
+
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6">
+					<div class="custom-progressbar">
+					</div>
+				</div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div class="mui-scroll-wrapper" id="pullrefresh1">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="listdata1">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div class="mui-scroll-wrapper" id="pullrefresh2">
+							<div class="mui-scroll">
+								<ul class="mui-table-view" id="listdata2">
+
+								</ul>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+	</body>
+	<script type="text/javascript" src="../../js/mui.js" ></script>
+	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Default.js" ></script>
+	<script type="text/javascript" src="../../js/demo_pullRefresh_multi_skin.js" ></script>
+	<script>
+		
+		window.onload = function() {
+			demoPullToRefresh.init(PullToRefreshSkinDefault);
+		};
+		
+	</script>
+	
+</html>

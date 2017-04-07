@@ -1,0 +1,61 @@
+<!-- 
+        作者：dailc
+        时间：2017-04-05
+        描述：  默认的皮肤
+                     所有的皮肤引入后都会暴露 PullToRefreshSkin(类别)，如 PullToRefreshSkinDefault   
+        注意，一些默认设置这里就不再赘述了，具体可以参考源码中各个skin中的头部默认设置
+    另外其实初始化时也可以用其它的自定义loading来替代uploading的动画的，这里也不在赘述
+    注意 skin里面生成的对象和bizlogic里面拥有的属性不一样
+    
+   type2皮肤是自定义的图片
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+
+		<title>下拉刷新皮肤 type2</title>
+		<link rel="stylesheet" href="../../css/mui.min.css" />
+		<link rel="stylesheet" href="../../css/common.css" />
+		<link rel="stylesheet" href="../../css/common_search.css" />
+		<link rel="stylesheet" href="../../../src/core/pulltorefresh/PullToRefresh-Skin.css" />
+	</head>
+
+	<body>
+		<!--下拉刷新容器
+					pullrefresh 和 listdata是下拉刷新组件默认的id
+					简单的调用没有必要修改,如果有自定义修改需求的,请参考详细调用
+				-->
+		<div id="pullrefresh" class="mui-scroll-wrapper mui-content pt0">
+
+			<div class="mui-scroll">
+				<!--通用样式1 -->
+				<div class="common-input-row common-input-type1">
+					<div class="common-input ">
+						<span class="btn-search mui-icon mui-icon-search"></span>
+						<input type="text" class="common-input-clear" placeholder="请输入关键字" id="input-searchName">
+					</div>
+				</div>
+				<ul class="mui-table-view" id="listdata">
+
+				</ul>
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Type2.js"></script>
+	<script type="text/javascript" src="../../js/demo_pullRefresh_skin.js" ></script>
+	<script>
+		//或者在框架内部的别名引入
+		//require('PullToRefresh_Skin_Type2');
+
+		
+		window.onload = function() {
+			demoPullToRefresh.init(PullToRefreshSkinType2);
+		};
+		
+	</script>
+
+</html>
