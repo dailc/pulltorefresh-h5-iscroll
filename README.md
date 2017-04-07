@@ -1,7 +1,9 @@
-## 说明
+## H5下拉刷新皮肤系列
 基于`IScroll`的全套下拉刷新皮肤
 
 各式各样的皮肤。
+
+[下拉刷新皮肤示例](https://dailc.github.io/pullToRefresh-h5-iscroll/examples/html)
 
 ### 使用
 有两种使用方式:
@@ -15,8 +17,6 @@
 除了基于mui的默认皮肤外，其它皮肤都是基于`IScroll5`的，所以打包出来后文件都要大很多(不过可以脱离mui使用)。
 另外，其实一些canvas动画或者css3动画的下拉刷新在某些手机中还挺卡的，因此比较实用的其实是基于mui那个下拉刷新自定义图片
 
-### 安装
+### 更多说明
 
-* `npm install`安装所有依赖包
-* `npm run build`可以进行代码编译，打包出来
-* 或者采用`npm run dev`边修改变编译，实时看到更新效果
+[examples目录结构说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/examples/html)
