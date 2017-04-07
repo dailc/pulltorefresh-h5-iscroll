@@ -1,7 +1,7 @@
 ## H5下拉刷新皮肤系列
 基于`IScroll`的全套下拉刷新皮肤。各式各样的皮肤。以及下拉刷新实现基类供自定义UI实现。
 
-### 效果
+### Effect(效果)
 
 * 效果1
 ![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect1.gif)
@@ -24,7 +24,7 @@
 * 示例页面
 [下拉刷新皮肤示例](https://dailc.github.io/pullToRefresh-h5-iscroll/examples/html/)
 
-### 使用
+### How To Use(使用)
 
 * Require(引入脚本)
 
@@ -75,11 +75,23 @@
 	```
 	具体可以将`PullToRefreshSkinDefault`换为具体皮肤，其它更多操作参考示例
 
-* 注意
+* API(暴露出来的方法)
+
+	```
+	* finished //这是一个属性，用来控制当前上拉加载是否可用
+	* refresh() //重置状态。譬如上拉加载关闭后需要手动refresh重置finished状态
+	* pulldownLoading() //主动触发一个下拉刷新的动画(同时会触发下拉回调)
+	* pullupLoading() //主动触发一个上拉加载的动画(同时会触发上拉回调)
+	* endPullDownToRefresh() //关闭下拉刷新动画，重置状态
+	* endPullUpToRefresh(finished) //关闭上拉加载动画，重置状态，如果finished，则不允许在上拉，除非再次refresh()
+	```
+	关于更多的使用说明(如自定义UI类的实现，请参考最后的更多说明)
+	
+* (Notice)注意
 	* 如果使用了非mui外的皮肤，需要引入样式文件`PullToRefresh-Skin.css`
 	* 另外，也支持`require`方式引入，不过webpack打包出来的dist中，就算`require`引入了，也请通过全局变量方式来使用，如`PullToRefreshSkinDefault`
 
-* 相应的全局变量与JS文件
+* (Global Variable)相应的全局变量与JS文件
 
 	```
 	IScroll //PullToRefresh-IScroll-Probe.js
