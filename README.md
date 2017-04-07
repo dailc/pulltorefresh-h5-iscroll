@@ -1,8 +1,27 @@
 ## H5下拉刷新皮肤系列
-基于`IScroll`的全套下拉刷新皮肤
+基于`IScroll`的全套下拉刷新皮肤。各式各样的皮肤。以及下拉刷新实现基类供自定义UI实现。
 
-各式各样的皮肤。
+### 效果
 
+* 效果1
+![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect1.gif)
+
+* 效果2
+![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect2.gif)
+
+* 效果3
+![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect3.gif)
+
+* 效果4
+![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect4.gif)
+
+* 效果5
+![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect5.gif)
+
+* 效果6
+![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect6.gif)
+
+* 示例页面
 [下拉刷新皮肤示例](https://dailc.github.io/pullToRefresh-h5-iscroll/examples/)
 
 ### 使用
@@ -19,5 +38,5 @@
 
 ### 更多说明
 
-[examples目录结构说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/examples/html)
-[源码使用说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/src/)
+* [examples目录结构说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/examples/html)
+* [源码使用说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/src/)
