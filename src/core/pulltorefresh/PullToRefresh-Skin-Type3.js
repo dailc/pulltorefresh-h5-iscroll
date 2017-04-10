@@ -264,7 +264,9 @@
 			//需要设一个定时，否则可能计算失误,这里在返回到offset前就先隐藏了
 			var self = this;
 			setTimeout(function() {
-				self.topPocket && self._setOffsetY(self.topPocket.offsetHeight||0 , function() {
+				//暂时写死一个，用offset有时会有失误
+				//self.topPocket.offsetHeight||0
+				self.topPocket&&self._setOffsetY(74, function() {
 					self.topPocket.style.visibility = 'hidden';
 					self.bottomPocket && (self.bottomPocket.style.visibility = 'visible');
 				});
