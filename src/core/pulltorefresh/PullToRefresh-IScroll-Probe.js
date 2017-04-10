@@ -2191,12 +2191,12 @@
 
 	IScroll.utils = utils;
 
-	//兼容require
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = IScroll;
-	} else if(typeof define == 'function' && define.amd || define.cmd) {
+	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
 		define(function() { return IScroll; });
-	}
+	} 
+	
 	//默认暴露
 	window.IScroll = IScroll;
 
