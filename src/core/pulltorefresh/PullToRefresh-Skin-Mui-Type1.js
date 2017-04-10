@@ -42,7 +42,7 @@
 		element: '#pullrefresh'
 	};
 	//使用了mui里的定义
-	(function($, document, undefined) {
+	(function(document, undefined) {
 		var CLASS_PULL_TOP_POCKET = 'mui-pull-top-pocket';
 		var CLASS_PULL_BOTTOM_POCKET = 'mui-pull-bottom-pocket';
 		var CLASS_PULL = 'mui-pull';
@@ -68,7 +68,7 @@
 
 		var PullRefresh = {
 			init: function(element, options) {
-				this._super(element, $.extend(true, {
+				this._super(element, mui.extend(true, {
 					scrollY: true,
 					scrollX: false,
 					indicators: true,
@@ -221,13 +221,13 @@
 			}
 		};
 		global.PullRefresh = PullRefresh;
-	})(mui, document);
-	(function($, window, document, undefined) {
+	})(document);
+	(function(window, document, undefined) {
 
 		var CLASS_VISIBILITY = 'mui-visibility';
 		var CLASS_HIDDEN = 'mui-hidden';
 
-		var PullRefresh = $.Scroll.extend($.extend({
+		var PullRefresh = mui.Scroll.extend(mui.extend({
 			handleEvent: function(e) {
 				this._super(e);
 				if(e.type === 'scrollbottom') {
@@ -431,7 +431,7 @@
 			}
 			return pullRefreshApi;
 		};
-	})(mui, window, document);
+	})(window, document);
 	
 	//兼容require
 	if(typeof module != 'undefined' && module.exports) {
