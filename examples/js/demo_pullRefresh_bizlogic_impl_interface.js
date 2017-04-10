@@ -13,8 +13,6 @@
 		var pullToRefreshObj = PullToRefreshTools.initPullDownRefresh({
 			'targetPullToRefresh': pullToRefreshBase,
 			'isDebug': false,
-			//skin已经不再这样传了
-			//'skin': 'default',
 			'bizlogic': {
 				defaultInitPageNum: 0,
 				getUrl: 'http://115.29.151.25:8012/request.php',

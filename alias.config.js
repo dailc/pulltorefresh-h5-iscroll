@@ -34,6 +34,6 @@ module.exports = {
 	
 	//下拉刷新的业务实现(里面进一步封装，默认会对接口数据进行处理，业务开发时一般会使用这个，翻页逻辑里面自动处理)
 	//一般一个业务实现+一个上面的皮肤  就是项目中最长用到的下拉刷新场景
-	'PullToRefresh_Bizlogic_Impl': path.join(__dirname, "./src/core/pulltorefresh/PullToRefresh-Bizlogic-Impl.js"),
+	'PullToRefresh_Bizlogic_Core': path.join(__dirname, "./src/core/pulltorefresh/PullToRefresh-Bizlogic-Core.js"),
 
 };
