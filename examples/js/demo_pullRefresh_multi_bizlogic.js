@@ -126,7 +126,7 @@
 	//兼容require
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
-	} else if(typeof define == 'function' && define.amd) {
+	} else if(typeof define == 'function' && define.amd || define.cmd) {
 		define(function() { return exports; });
 	} 
 	window.demoPullToRefresh = exports;
