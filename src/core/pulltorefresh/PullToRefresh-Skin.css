@@ -199,6 +199,10 @@
 
 /*皮肤4，饼状图，弹性球等一系列*/
 
+.pulltorefresh-type4 .pull-top-pocket {
+	position: absolute;
+	height: 100%;
+}
 
 .pulltorefresh-type4 .pull-top-pocket .pull-caption {
 	position: absolute;

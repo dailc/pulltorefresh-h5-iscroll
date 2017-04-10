@@ -348,23 +348,19 @@
 				self._pulldownLoaingAnimationSuccessHook && self._pulldownLoaingAnimationSuccessHook(function() {
 					timer&&clearTimeout(timer);
 					self.allowPullDownSuccessLoading = false;
-					//恢复回滚
-					self.scroller.minScrollY = -self.offsetY;
+					
 					self._checkPullDownLoadingEnd();
 				}, isSuccess);
 				timer = setTimeout(function() {
 					timer&&clearTimeout(timer);
-					self.allowPullDownSuccessLoading = false;
-					//恢复回滚
-					self.scroller.minScrollY = -self.offsetY;	
+					self.allowPullDownSuccessLoading = false;	
 					self._checkPullDownLoadingEnd();
 				}, self.options.scroll.successAnimationTime);
-
 				//由于success函数中有可能会使用animation动画，而IScroll中监听到_transitionEnd则会重置，因此需要再次主动定位
 				//需要设置一个延时，因为IScroll有一个默认的回滚，这个要在它之后
-				setTimeout(function() {
-					self.scroller.scrollTo(0, self.options.down.height - this.offsetY, 0);
-				}, 0);
+//				setTimeout(function() {
+//					self.scroller.scrollTo(0, self.options.down.height - this.offsetY, 0);
+//				}, 0);
 
 			}
 		},
@@ -379,8 +375,14 @@
 			}
 			self._pulldownLoaingAnimationEndHook && self._pulldownLoaingAnimationEndHook();
 			self.scroller.scrollTo(0, -self.offsetY, self.options.scroll.bounceTime);
+			
+			setTimeout(function(){
+				//恢复回滚
+				self.scroller.minScrollY = -self.offsetY;
+				self.scroller.refresh();
+			},self.options.scroll.bounceTime);
 			//结束完动画后要刷新容器
-			self.scroller.refresh();
+			
 		},
 		/**
 		 * @description 结束上拉加载更多

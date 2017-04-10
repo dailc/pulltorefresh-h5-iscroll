@@ -238,16 +238,6 @@
 					this.scrollWrap.appendChild(this.bottomPocket);
 				}
 			}
-			//需要滑动到offset位置
-			//这个如果不设置，下拉的提示就会位置不正确
-			//需要设一个定时，否则可能计算失误,这里在返回到offset前就先隐藏了
-			var self = this;
-			setTimeout(function() {
-				self.topPocket && self._setOffsetY(self.topPocket.offsetHeight||0 , function() {
-					self.topPocket.style.visibility = 'hidden';
-					self.bottomPocket && (self.bottomPocket.style.visibility = 'visible');
-				});
-			}, 0);
 		},
 
 		/**

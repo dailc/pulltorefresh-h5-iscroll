@@ -786,7 +786,9 @@
 			//默认是0
 			this.minScrollY = this.minScrollY || 0;
 			/* REPLACE END: refresh */
-
+			if(this.maxScrollY>this.minScrollY) {
+				this.maxScrollY = this.minScrollY;
+			}
 			this.hasHorizontalScroll = this.options.scrollX && this.maxScrollX < 0;
 			this.hasVerticalScroll = this.options.scrollY && this.maxScrollY < 0;
 

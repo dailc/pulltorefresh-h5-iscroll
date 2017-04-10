@@ -126,5 +126,6 @@
 
 * 20170410
 	* 增加cmd引入支持
+	* 修复IScroll内部`maxScrollY`引起的冲突
 
 ## License (MIT)
