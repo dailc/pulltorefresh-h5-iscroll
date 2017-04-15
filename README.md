@@ -122,6 +122,10 @@
 * [examples目录结构说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/examples/html)
 * [源码使用说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/src/)
 
+#### 相关博文
+
+* [H5下拉刷新,多种皮肤，便于拓展！](http://www.jianshu.com/p/ef3183adb896)
+
 ## 更新日志
 
 * 20170410
