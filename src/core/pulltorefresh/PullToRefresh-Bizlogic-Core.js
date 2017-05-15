@@ -234,15 +234,37 @@
 			self.clearResponseEl();
 			//当前页变为初始页-1  因为会处罚上拉回调,默认将页数+1
 			self.currPage = self.options.bizlogic.defaultInitPageNum - 1;
-			//手动将状态设为可以加载更多
-			if(self.pullToRefreshInstance.finished) {
-				self.pullToRefreshInstance.refresh(true);
-				self.isShouldNoMoreData = true;
-			}
-			//触发一次加载更多
-			self.pullToRefreshInstance.pullupLoading();
+			self.loadingMore();
 		}
 
+	};
+	/**
+	 * @description 增加加载更多的翻页功能
+	 * @param {Function} callback 成功回调
+	 */
+	PullDownRefresh.prototype.loadingMore = function(callback) {
+		var self = this;
+		// 只会用一次的，用完即可删除
+		self.loadingMoreSuccess = callback;
+		//手动将状态设为可以加载更多
+		if(self.pullToRefreshInstance.finished) {
+			self.pullToRefreshInstance.refresh(true);
+			self.isShouldNoMoreData = true;
+		}
+		//触发一次加载更多
+		self.pullToRefreshInstance.pullupLoading();
+	};
+	/**
+	 * @description 禁止上拉加载功能
+	 */
+	PullDownRefresh.prototype.disablePullupToRefresh = function() {
+		this.pullToRefreshInstance.disablePullupToRefresh();
+	};
+	/**
+	 * @description 开启上拉加载功能
+	 */
+	PullDownRefresh.prototype.enablePullupToRefresh = function() {
+		this.pullToRefreshInstance.enablePullupToRefresh();
 	};
 	/**
 	 * @description ajax请求数据

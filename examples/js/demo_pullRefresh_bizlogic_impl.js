@@ -58,6 +58,9 @@
 		pullToRefreshBase = pullToRefreshObj;
 		initSearch();
 		pullToRefreshBiz = initPullRefreshList(true);
+		
+		pullToRefreshBiz.disablePullupToRefresh();
+		pullToRefreshBiz.enablePullupToRefresh();
 	};
 	
 	//兼容require
