@@ -164,18 +164,24 @@
 		 * @description 上拉加载的成功动画，每次确保触发一次
 		 */
 		_pullupLoaingAnimationHook: function(isFinished) {
-			this._setCaption(false,this.options.up.contentrefresh);
+			if(this.options.up) {
+				this._setCaption(false,this.options.up.contentrefresh);
+			}
+			
 		},
 		/**
 		 * @description 上拉加载的成功动画-动画完毕后可能的成功提示，每次确保触发一次
 		 */
 		_pullupLoaingAnimationSuccessHook: function(isFinished) {
-			if(isFinished) {
-				this._setCaption(false,this.options.up.contentnomore);
-			} else {
-				this._setCaption(false,this.options.up.contentdown);
+			if(this.options.up) {
+				if(isFinished) {
+					this._setCaption(false,this.options.up.contentnomore);
+				} else {
+					this._setCaption(false,this.options.up.contentdown);
+				}
+				//this.bottomPocket.classList.remove(CLASS_VISIBILITY);
 			}
-			//this.bottomPocket.classList.remove(CLASS_VISIBILITY);
+			
 		},
 		/**
 		 * @description _disablePullUpHook
@@ -322,12 +328,15 @@
 								loading.style.webkitAnimation = "none";
 							}
 						} else {
-							if(title === options.up.contentrefresh) {
-								loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
-							} else {
-								loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
+							if(options.up) {
+								if(title === options.up.contentrefresh) {
+									loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
+								} else {
+									loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
+								}
+								self._setCaptionClass(false, caption, title);
 							}
-							self._setCaptionClass(false, caption, title);
+							
 						}
 						this.lastTitle = title;
 					}

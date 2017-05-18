@@ -337,12 +337,15 @@
 								loading.style.webkitAnimation = "none";
 							}
 						} else {
-							if(title === options.up.contentrefresh) {
-								loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
-							} else {
-								loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
+							if(options.up) {
+								if(title === options.up.contentrefresh) {
+									loading.className = CLASS_LOADING + ' ' + CLASS_VISIBILITY;
+								} else {
+									loading.className = CLASS_LOADING + ' ' + CLASS_HIDDEN;
+								}
+								self._setCaptionClass(false, caption, title);
 							}
-							self._setCaptionClass(false, caption, title);
+							
 						}
 						this.lastTitle = title;
 					}

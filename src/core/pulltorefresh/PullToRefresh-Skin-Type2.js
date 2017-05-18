@@ -250,20 +250,23 @@
 								pocket.className = 'pull-top-pocket error';
 							}
 						} else {
-							if(title === options.up.contentrefresh) {
-								pocket.classList.remove('nomore');
-								pocket.classList.add('loading');
-							} else {
-								pocket.classList.remove('loading');
-
-								if(title === options.up.contentnomore) {
-									pocket.classList.add('nomore');
-								} else {
+							if(options.up) {
+								if(title === options.up.contentrefresh) {
 									pocket.classList.remove('nomore');
+									pocket.classList.add('loading');
+								} else {
+									pocket.classList.remove('loading');
+	
+									if(title === options.up.contentnomore) {
+										pocket.classList.add('nomore');
+									} else {
+										pocket.classList.remove('nomore');
+									}
+	
 								}
 
 							}
-
+							
 						}
 						this.lastTitle = title;
 					}
