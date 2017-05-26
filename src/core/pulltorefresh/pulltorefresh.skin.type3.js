@@ -1,15 +1,16 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 皮肤类只会实现UI相关的hook函数
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 皮肤类只会实现UI相关的hook函数
  * 皮肤 type3 ，
  * 下拉刷新动画用canvas动画球
  * 依赖 PullToRefresh_Skin_Css
  */
 (function(exports) {
-     var CommonTools = require('CommonTools_Core');
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
 	var PullToRefreshBase = require('PullToRefresh_Core');
 	/**
 	 * 全局参数
@@ -32,7 +33,7 @@
 			isSuccessTips: true,
 			callback: CommonTools.noop,
 			tips: {
-				colors: ['d00324','e47012', '9aea1c'],
+				colors: ['d00324', 'e47012', '9aea1c'],
 				size: 200, //width=height=size;x=y=size/2;radius=size/4
 				lineWidth: 15,
 				duration: 1000,
@@ -79,10 +80,10 @@
 
 		_checkHidden: function(enablePullDown, enablePullUp) {
 			if(!enablePullUp) {
-				this.bottomPocket&&this.bottomPocket.classList.add(CLASS_HIDDEN);
+				this.bottomPocket && this.bottomPocket.classList.add(CLASS_HIDDEN);
 			}
 			if(!enablePullDown) {
-				this.topPocket&&this.topPocket.classList.add(CLASS_HIDDEN);
+				this.topPocket && this.topPocket.classList.add(CLASS_HIDDEN);
 			}
 		},
 
@@ -101,13 +102,13 @@
 			var ratio = Math.min(deltaY / (thresholdHeight * 3), 1);
 			var ratioPI = Math.min(1, ratio * 2);
 			this._drawCanvasTips(ratioPI);
-			
+
 		},
 		/**
 		 * @description 下拉刷新的成功动画，每次确保触发一次
 		 */
 		_pulldownLoaingAnimationHook: function() {
-			this._drawCanvasTips(1,300);
+			this._drawCanvasTips(1, 300);
 			this.canvasUtilObj.startSpin();
 			this._setCaption(true, this.options.down.contentrefresh);
 		},
@@ -135,10 +136,10 @@
 			this._setCaption(true, this.options.down.contentdown, true);
 			setTimeout(function() {
 				self.topPocket.style.visibility = 'hidden';
-			},300);
-			
+			}, 300);
+
 		},
-		
+
 		/**
 		 * @description 上拉加载的成功动画，每次确保触发一次
 		 */
@@ -174,16 +175,16 @@
 		 * @param {Number} ratio 比例
 		 * @param {Number} time 过度时间
 		 */
-		_drawCanvasTips: function(ratio,time) {
-			time = time||0;
+		_drawCanvasTips: function(ratio, time) {
+			time = time || 0;
 			this.pullDownCanvas.style.opacity = ratio;
-			this.pullDownCanvas.style.webkitTransform = 'rotate(' + 300 * ratio + 'deg) scale('+ratio+','+ratio+')';
+			this.pullDownCanvas.style.webkitTransform = 'rotate(' + 300 * ratio + 'deg) scale(' + ratio + ',' + ratio + ')';
 			//暂时不用过多的动画，否则会卡
 			//this.pullDownCanvasContainer.style.opacity = ratio;
 			//this.pullDownCanvasContainer.style.webkitTransform = 'rotate(' + 300 * ratio + 'deg) scale('+ratio+','+ratio+')';
 			//this.pullDownCanvasContainer.style.webkitTransitionDuration = time+'ms';
 			//this.pullDownCanvasContainer.style.webkitTransitionTimingFunction = 'ease-in';
-			
+
 			var canvas = this.pullDownCanvas;
 			var ctx = this.pullDownCanvasCtx;
 			var size = this.options.down.tips.size;
@@ -206,7 +207,7 @@
 			var pocket = document.createElement('div');
 			pocket.style.visibility = 'hidden';
 			pocket.className = 'pull-top-pocket';
-			pocket.innerHTML = '<div class="pull-loading-icon"><div class="pull-top-canvas"><canvas id="'+CommonTools.uuid()+'" class="pull-down-loading-canvas" width="' + self.options.down.tips.size + '" height="' + self.options.down.tips.size + '"></canvas></div></div><div class="pull-caption">' + this.options.down.contentdown + '</div>';
+			pocket.innerHTML = '<div class="pull-loading-icon"><div class="pull-top-canvas"><canvas id="' + CommonTools.uuid() + '" class="pull-down-loading-canvas" width="' + self.options.down.tips.size + '" height="' + self.options.down.tips.size + '"></canvas></div></div><div class="pull-caption">' + this.options.down.contentdown + '</div>';
 			return pocket;
 		},
 		/**
@@ -266,7 +267,7 @@
 			setTimeout(function() {
 				//暂时写死一个，用offset有时会有失误
 				//self.topPocket.offsetHeight||0
-				self.topPocket&&self._setOffsetY(74, function() {
+				self.topPocket && self._setOffsetY(74, function() {
 					self.topPocket.style.visibility = 'hidden';
 					self.bottomPocket && (self.bottomPocket.style.visibility = 'visible');
 				});
@@ -587,7 +588,7 @@
 			var startSpin = function() {
 				startTime = 0;
 				oldStep = 0;
-				!rAF&&(rAF = requestAnimationFrame(spin));
+				!rAF && (rAF = requestAnimationFrame(spin));
 			};
 			var stopSpin = function() {
 				rAF && cancelAnimationFrame(rAF);
@@ -631,13 +632,17 @@
 		return PullToRefreshBase.initPullToRefresh(PullToRefresh, element, options);
 	};
 
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshSkinType3 = exports;
+		define(function() {
+			return exports;
+		});
+	}
 	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.type3');
+
 })({});

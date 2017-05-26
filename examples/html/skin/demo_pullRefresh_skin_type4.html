@@ -20,7 +20,7 @@
 		<link rel="stylesheet" href="../../css/mui.min.css" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/common_search.css" />
-		<link rel="stylesheet" href="../../../src/core/pulltorefresh/PullToRefresh-Skin.css" />
+		<link rel="stylesheet" href="../../css/pulltorefresh.skin.css" />
 	</head>
 
 	<body>
@@ -45,17 +45,13 @@
 		</div>
 
 	</body>
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.IScroll.Probe.js" ></script>
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Type4.js"></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.iscroll.probe.js" ></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.skin.type4.js"></script>
 	<script type="text/javascript" src="../../js/demo_pullRefresh_skin.js" ></script>
 	<script>
-		//或者在框架内部的别名引入
-		//require('PullToRefresh_IScroll_Probe');
-		//require('PullToRefresh_Skin_Type4');
 
-		
 		window.onload = function() {
-			demoPullToRefresh.init(PullToRefreshSkinType4);
+			demoPullToRefresh.init(PullToRefreshTools.skin.type4);
 		};
 		
 	</script>

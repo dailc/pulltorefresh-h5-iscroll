@@ -10,7 +10,7 @@
 	 * @description 初始化下拉刷新
 	 */
 	function initPullRefreshList(isAuto) {
-		var pullToRefreshObj = PullToRefreshTools.initPullDownRefresh({
+		var pullToRefreshObj = PullToRefreshTools.bizlogic.initPullDownRefresh({
 			'targetPullToRefresh': pullToRefreshBase,
 			'isDebug': false,
 			'bizlogic': {

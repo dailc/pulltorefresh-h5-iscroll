@@ -1,14 +1,15 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 皮肤类只会实现UI相关的hook函数
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 皮肤类只会实现UI相关的hook函数
  * 皮肤 type2 ，不再基于mui的css，而是有自己的资源引用
  * 依赖 PullToRefresh_Skin_Css
  */
 (function(exports) {
-     var CommonTools = require('CommonTools_Core');
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
 	var PullToRefreshBase = require('PullToRefresh_Core');
 	/**
 	 * 全局参数
@@ -71,10 +72,10 @@
 
 		_checkHidden: function(enablePullDown, enablePullUp) {
 			if(!enablePullUp) {
-				this.bottomPocket&&this.bottomPocket.classList.add(CLASS_HIDDEN);
+				this.bottomPocket && this.bottomPocket.classList.add(CLASS_HIDDEN);
 			}
 			if(!enablePullDown) {
-				this.topPocket&&this.topPocket.classList.add(CLASS_HIDDEN);
+				this.topPocket && this.topPocket.classList.add(CLASS_HIDDEN);
 			}
 		},
 
@@ -103,9 +104,9 @@
 		 * @param {Function} done 这个可以提前结束动画-如果不想要的话
 		 * @param {Boolean} isSuccess 是否请求成功
 		 */
-		_pulldownLoaingAnimationSuccessHook: function(done,isSuccess) {
+		_pulldownLoaingAnimationSuccessHook: function(done, isSuccess) {
 			if(this.options.down.isSuccessTips) {
-				this._setCaption(true,isSuccess?this.options.down.contentrefreshsuccess:this.options.down.contentrefresherror);
+				this._setCaption(true, isSuccess ? this.options.down.contentrefreshsuccess : this.options.down.contentrefresherror);
 			} else {
 				//否则直接没有成功提示
 				done();
@@ -197,13 +198,13 @@
 			setTimeout(function() {
 				//暂时写死一个，用offset有时会有失误
 				//self.topPocket.offsetHeight||0
-				self.topPocket&&self._setOffsetY(74, function() {
+				self.topPocket && self._setOffsetY(74, function() {
 					self.topPocket.style.visibility = 'visible';
-					self.bottomPocket&&(self.bottomPocket.style.visibility = 'visible');
+					self.bottomPocket && (self.bottomPocket.style.visibility = 'visible');
 				});
 			}, 0);
 		},
-		
+
 		/**
 		 * @description 设置caption
 		 * @param {Object} isPulldown
@@ -244,7 +245,7 @@
 								pocket.className = 'pull-top-pocket ';
 							} else if(title === options.down.contentrefreshsuccess) {
 								//优先显示tips
-								label.innerHTML = self.successTips||title;
+								label.innerHTML = self.successTips || title;
 								pocket.className = 'pull-top-pocket success';
 							} else if(title === options.down.contentrefresherror) {
 								pocket.className = 'pull-top-pocket error';
@@ -256,17 +257,17 @@
 									pocket.classList.add('loading');
 								} else {
 									pocket.classList.remove('loading');
-	
+
 									if(title === options.up.contentnomore) {
 										pocket.classList.add('nomore');
 									} else {
 										pocket.classList.remove('nomore');
 									}
-	
+
 								}
 
 							}
-							
+
 						}
 						this.lastTitle = title;
 					}
@@ -294,13 +295,17 @@
 		options = CommonTools.extend(true, {}, defaultSettingOptions, options);
 		return PullToRefreshBase.initPullToRefresh(PullToRefresh, element, options);
 	};
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshSkinType2 = exports;
+		define(function() {
+			return exports;
+		});
+	}
 	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.type2');
+
 })({});

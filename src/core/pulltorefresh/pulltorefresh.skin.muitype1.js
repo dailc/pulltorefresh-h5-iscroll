@@ -1,17 +1,18 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 这个皮肤也是基于mui的IScroll的，不过和mui default不同的是，单独h5下的实现拿出来了，
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 这个皮肤也是基于mui的IScroll的，不过和mui default不同的是，单独h5下的实现拿出来了，
  * 也就是说不再支持Android下的双webview兼容，但是可以生成多个
  * 依赖mui的css
  */
 (function(exports) {
 	"use strict;"
-	//每一个页面都要引入的工具类
-	var CommonTools = require('CommonTools_Core');
-	//定义一个global
+	// 每一个页面都要引入的工具类
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
+	// 定义一个global
 	var global = {};
 	/**
 	 * 默认的设置参数
@@ -440,12 +441,17 @@
 		}
 		return pullRefreshApi;
 	};
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshSkinMuiType1 = exports;
+		define(function() {
+			return exports;
+		});
+	}
+	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.muitype1');
+	
 })({});

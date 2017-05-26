@@ -29,8 +29,8 @@
 * Require(引入脚本)
 
 	```
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.IScroll.Probe.js" ></script>
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Default.js"></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.iscroll.probe.js" ></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.skin.default.js"></script>
 	```
 	可以将`Skin.Default`替换为对应的皮肤
 	
@@ -48,7 +48,7 @@
 * JS Initialization(JS初始化)
 	
 	```
-	var pullToRefreshObj = PullToRefreshSkinDefault.initPullToRefresh({
+	var pullToRefreshObj = PullToRefreshTools.skin.default.initPullToRefresh({
 	    //这里用默认设置
 	    element: '#pullrefresh',
 	    //down为null表示不要下拉刷新    
@@ -73,7 +73,7 @@
 	    },
 	});
 	```
-	具体可以将`PullToRefreshSkinDefault`换为具体皮肤，其它更多操作参考示例
+	具体可以将`PullToRefreshTools.skin.default`换为其它皮肤，其它更多操作参考示例
 
 * API(暴露出来的方法)
 
@@ -88,25 +88,25 @@
 	关于更多的使用说明(如自定义UI类的实现，请参考最后的更多说明)
 	
 * (Notice)注意
-	* 如果使用了非mui外的皮肤，需要引入样式文件`PullToRefresh-Skin.css`
+	* 如果使用了非mui外的皮肤，需要引入样式文件`pulltorefresh.skin.css`
 	* 另外，也支持`require`方式引入，不过webpack打包出来的dist中，就算`require`引入了，也请通过全局变量方式来使用，如`PullToRefreshSkinDefault`
 
 * (Global Variable)相应的全局变量与JS文件
 
 	```
-	IScroll //PullToRefresh-IScroll-Probe.js
-	PullToRefreshCore //PullToRefresh-Core.js
-	PullToRefreshSkinDefault //PullToRefresh-Skin-Default.js
-	PullToRefreshSkinType1 //PullToRefresh-Skin-Type1.js
-	PullToRefreshSkinType2 //PullToRefresh-Skin-Type2.js
-	PullToRefreshSkinType3 //PullToRefresh-Skin-Type3.js
-	PullToRefreshSkinType4 //PullToRefresh-Skin-Type4.js
-	PullToRefreshSkinMuiDefault //PullToRefresh-Skin-Mui-Default.js
-	PullToRefreshSkinMuiType1 //PullToRefresh-Skin-Mui-Type1.js
-	PullToRefreshSkinMuiType2 //PullToRefresh-Skin-Mui-Type2.js
-	PullToRefreshSkinMuiType3 //PullToRefresh-Skin-Mui-Type3.js
-	PullToRefreshSkinNative	//PullToRefresh-Skin-Native.js
-	PullToRefreshTools	//PullToRefresh-Bizlogic-Impl.js
+	IScroll //pulltorefresh.iscroll.probe.js
+	PullToRefreshTools.core //pulltorefresh.core.js
+	PullToRefreshTools.skin.defaults //pulltorefresh.skin.default.js 需要和关键字区分
+	PullToRefreshTools.skin.type1 //pulltorefresh.skin.type1.js
+	PullToRefreshTools.skin.type2 //pulltorefresh.skin.type2.js
+	PullToRefreshTools.skin.type3 //pulltorefresh.skin.type3.js
+	PullToRefreshTools.skin.type4 //pulltorefresh.skin.type4.js
+	PullToRefreshTools.skin.muidefault //pulltorefresh.skin.muidefault.js
+	PullToRefreshTools.skin.muitype1 //pulltorefresh.skin.muitype1.js
+	PullToRefreshTools.skin.muitype2 //pulltorefresh.skin.muitype2.js
+	PullToRefreshTools.skin.muitype3 //pulltorefresh.skin.muitype3.js
+	PullToRefreshTools.skin.natives	//pulltorefresh.skin.native.js 需要和保留字区分
+	PullToRefreshTools.bizlogic	//pulltorefresh.bizlogic.impl.js
 	```
 	
 
@@ -129,9 +129,14 @@
 ## 更新日志
 
 * 20170410
+	* 版本`1.0.0`
 	* 增加cmd引入支持
 	* 修复IScroll内部`maxScrollY`引起的冲突
 * 20170518
 	* 修复关闭上拉加载后，重复下拉刷新报错的bug
+* 20170526
+	* 版本`2.0.0`
+	* 从源码层面重新修改命名空间
+	* 后续命名层面不会再有大的改动
 
 ## License (MIT)

@@ -20,7 +20,7 @@
 		<link rel="stylesheet" href="../../css/mui.min.css" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/common_search.css" />
-		<link rel="stylesheet" href="../../../src/core/pulltorefresh/PullToRefresh-Skin.css" />
+		<link rel="stylesheet" href="../../css/pulltorefresh.skin.css" />
 	</head>
 
 	<body>
@@ -46,15 +46,12 @@
 
 	</body>
 	<script type="text/javascript" src="../../js/mui.js" ></script>
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Mui.Type2.js"></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.skin.muitype2.js"></script>
 	<script type="text/javascript" src="../../js/demo_pullRefresh_skin.js" ></script>
 	<script>
-		//或者在框架内部的别名引入
-		//require('PullToRefresh_Skin_Mui_Type2');
-
 		
 		window.onload = function() {
-			demoPullToRefresh.init(PullToRefreshSkinMuiType2);
+			demoPullToRefresh.init(PullToRefreshTools.skin.muitype2);
 		};
 		
 	</script>

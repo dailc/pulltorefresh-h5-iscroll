@@ -1,21 +1,22 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 这个系列下拉刷新和前面的几个type不一样，这个系列是直接基于mui.js的 Iscroll的
- * 这个type2其实是基于前面type1的，只不过canvas的绘制换了一个方法
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 这个系列下拉刷新和前面的几个type不一样，这个系列是直接基于mui.js的 Iscroll的
+ * 这个type3其实是基于前面type2的，只不过canvas的绘制换了一个方法
  * 依赖 PullToRefresh_Skin_Css
  */
 (function(exports) {
-     var CLASS_PULL_TOP_TIPS = 'mui-pull-top-tips';
 
 	"use strict;"
-	//每一个页面都要引入的工具类
-	var CommonTools = require('CommonTools_Core');
-	//下拉刷新
+	// 每一个页面都要引入的工具类
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
+	// 下拉刷新
 	var PullToRefreshCoreCustom = require('PullToRefresh_Skin_Mui_Type2');
-	//继承
+	var CLASS_PULL_TOP_TIPS = 'mui-pull-top-tips';
+	// 继承
 	var PullToRefreshCoreCustom_material = PullToRefreshCoreCustom.PullToRefresh.extend({
 		init: function(element, options) {
 			this._super(element, options);
@@ -380,13 +381,17 @@
 		var instance = new exports.PullToRefresh(element, options);
 		return instance;
 	};
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshSkinMuiType3 = exports;
+		define(function() {
+			return exports;
+		});
+	}
+	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.muitype3');
 	
 })({});

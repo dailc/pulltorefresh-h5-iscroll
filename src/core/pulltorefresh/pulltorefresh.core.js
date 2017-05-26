@@ -1,9 +1,9 @@
 /**
- * @description  基于IScroll实现的下拉刷新的基类
- * @author dailc
- * @version 4.0
- * @time 2017-03-28
- * 基于IScroll实现(hasVerticalScroll强行将这个设为true,修正不会下拉问题，同时需要设置对应的maxScrollY)
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 基于IScroll实现(hasVerticalScroll强行将这个设为true,修正不会下拉问题，同时需要设置对应的maxScrollY)
  * 注意:prototype 状态用2   这时候scroll只会在手动拉时才会触发
  * 如果为3则会自动触发，不好计算
  * 并且为3是不会使用transition动画，用到的是cpu计算，性能低
@@ -30,7 +30,8 @@
  * _disablePullUpHook 禁止pullup后的回调
  */
 (function(exports) {
-    var CommonTools = require('CommonTools_Core');
+    var CommonTools = require('Core_Common');
+    var NameSpace = require('Core_NameSpace');
 	//基于IScroll 暂时单独剥离IScroll
 	//require('PullToRefresh_IScroll_Probe');
 
@@ -580,12 +581,16 @@
 	};
 	
 	
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshCore = exports;
+		define(function() {
+			return exports;
+		});
+	}
+	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'core');
 })({});

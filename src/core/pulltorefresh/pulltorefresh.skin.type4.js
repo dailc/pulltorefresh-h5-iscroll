@@ -1,15 +1,16 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 皮肤类只会实现UI相关的hook函数
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 皮肤类只会实现UI相关的hook函数
  * 皮肤 type3 ，
  * 饼状图，刷新圈，椭圆形变，√状态，×状态等，纯css3实现
  * 依赖 PullToRefresh_Skin_Css
  */
 (function(exports) {
-     var CommonTools = require('CommonTools_Core');
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
 	var PullToRefreshBase = require('PullToRefresh_Core');
 	/**
 	 * 全局参数
@@ -72,10 +73,10 @@
 
 		_checkHidden: function(enablePullDown, enablePullUp) {
 			if(!enablePullUp) {
-				this.bottomPocket&&this.bottomPocket.classList.add(CLASS_HIDDEN);
+				this.bottomPocket && this.bottomPocket.classList.add(CLASS_HIDDEN);
 			}
 			if(!enablePullDown) {
-				this.topPocket&&this.topPocket.classList.add(CLASS_HIDDEN);
+				this.topPocket && this.topPocket.classList.add(CLASS_HIDDEN);
 			}
 		},
 
@@ -85,22 +86,22 @@
 		 * @param {Number} thresholdHeight 对应的高度阈值
 		 */
 		_pullingHook: function(deltaY, thresholdHeight) {
-			
+
 			//高度阈值
 			if(deltaY >= thresholdHeight) {
 				this._setCaption(true, this.options.down.contentover);
 				//变化 topcaption 
-				
+
 				var diff = deltaY - thresholdHeight - 10;
-				if(diff>39) {
+				if(diff > 39) {
 					diff = 39;
 				} else if(diff < 0) {
 					diff = 0;
 				}
-				this.topcaption.style.webkitTransform = 'translate(' + 0 + ',' + (diff)*1.6  + 'px)';
-				this.topcaption.style.transform = 'translate(' + 0 + ',' + (diff)*1.6  + 'px)';
+				this.topcaption.style.webkitTransform = 'translate(' + 0 + ',' + (diff) * 1.6 + 'px)';
+				this.topcaption.style.transform = 'translate(' + 0 + ',' + (diff) * 1.6 + 'px)';
 			} else if(deltaY < thresholdHeight) {
-				this.topcaption.style.opacity = deltaY/thresholdHeight;
+				this.topcaption.style.opacity = deltaY / thresholdHeight;
 				//同时改变container
 				this.piecontainer.style.transform = 'translate(' + 0 + ',' + deltaY * 0.3 + 'px)';
 				this.piecontainer.style.webkitTransform = 'translate(' + 0 + ',' + deltaY * 0.3 + 'px)';
@@ -114,11 +115,11 @@
 		 */
 		_pulldownLoaingAnimationHook: function() {
 			var self = this;
-			this.pieAnimationUtilObj.refresh(function(){
+			this.pieAnimationUtilObj.refresh(function() {
 				//重置caption
 				self.topcaption.style.opacity = 1;
-				self.topcaption.style.transform = 'translate(' + 0 + ',' + 0  + 'px)';
-				self.topcaption.style.webkitTransform = 'translate(' + 0 + ',' + 0  + 'px)';
+				self.topcaption.style.transform = 'translate(' + 0 + ',' + 0 + 'px)';
+				self.topcaption.style.webkitTransform = 'translate(' + 0 + ',' + 0 + 'px)';
 				self.topcaption.style.transitionDuration = '300ms';
 				self.topcaption.style.webkitTransitionDuration = '300ms';
 				self.topcaption.style.transitionTimingFunction = 'ease-in';
@@ -134,7 +135,7 @@
 		 */
 		_pulldownLoaingAnimationSuccessHook: function(done, isSuccess) {
 			if(this.options.down.isSuccessTips) {
-				isSuccess?this.pieAnimationUtilObj.success():this.pieAnimationUtilObj.error();
+				isSuccess ? this.pieAnimationUtilObj.success() : this.pieAnimationUtilObj.error();
 				this._setCaption(true, isSuccess ? this.options.down.contentrefreshsuccess : this.options.down.contentrefresherror);
 			} else {
 				//否则直接没有成功提示
@@ -147,7 +148,7 @@
 		 */
 		_pulldownLoaingAnimationEndHook: function() {
 			var self = this;
-			this.pieAnimationUtilObj.end(function(){
+			this.pieAnimationUtilObj.end(function() {
 				self.topcaption.style.opacity = 0;
 				self.topcaption.style.webkitTransitionDuration = '0ms';
 				self.topcaption.style.transitionDuration = '0ms';
@@ -223,13 +224,12 @@
 				}
 				this.piecontainer = this.element.querySelector('.pie-anim-container');
 				this.topcaption = this.element.querySelector('.pull-caption');
-				console.log(this.element.id+','+this.piecontainer+','+this.topcaption);
+				console.log(this.element.id + ',' + this.piecontainer + ',' + this.topcaption);
 				//初始化
 				self.pieAnimationUtilObj = self.pieAnimationUtil();
 				self.pieAnimationUtilObj.init({
 					elem: this.piecontainer
 				});
-				
 
 			}
 			if(options.up && options.up.hasOwnProperty('callback')) {
@@ -392,7 +392,7 @@
 					refreshPregress.style.opacity = (deltaY - thresholdHeight) / 10;
 					if(deltaY <= thresholdHeight + thresholdScaleHeight) {
 						//这时候还不需要形变，只需要刷新条显示
-						
+
 					} else {
 						//需要形变了，改变pie
 						var diff = deltaY - thresholdHeight - thresholdScaleHeight;
@@ -449,8 +449,8 @@
 
 				//重置状态
 				oldPercent = null;
-				
-				hook&&hook();
+
+				hook && hook();
 			}
 
 			//成功函数-重置状态
@@ -504,7 +504,7 @@
 
 				//重置状态
 				oldPercent = null;
-				hook&&hook();
+				hook && hook();
 
 			}
 
@@ -528,15 +528,15 @@
 					successTips = elem.querySelector('.success-tips'),
 					errorTips = elem.querySelector('.error-tips');
 				oldWith = pie.offsetWidth,
-				oldHeight = pie.offsetHeight;
-				setTimeout(function(){
+					oldHeight = pie.offsetHeight;
+				setTimeout(function() {
 					//重新获取
 					oldWith = pie.offsetWidth;
 					oldHeight = pie.offsetHeight;
-				},0)
+				}, 0)
 				//初始化饼状图
 				_prefixStyle(pie, 'transform', 'scale(' + 0 + ',' + 0 + ')');
-				
+
 			}
 
 			return {
@@ -568,13 +568,17 @@
 		options = CommonTools.extend(true, {}, defaultSettingOptions, options);
 		return PullToRefreshBase.initPullToRefresh(PullToRefresh, element, options);
 	};
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshSkinType4 = exports;
+		define(function() {
+			return exports;
+		});
+	}
 	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.type4');
+
 })({});

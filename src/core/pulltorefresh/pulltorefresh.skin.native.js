@@ -1,15 +1,16 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 这个皮肤是ejs或钉钉下的下拉刷新，使用了他们自带提供的原生下拉刷新，以及自定义生成上拉加载
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 这个皮肤是ejs或钉钉下的下拉刷新，使用了他们自带提供的原生下拉刷新，以及自定义生成上拉加载
  * 注意:分别在ejs下或者钉钉下依赖对应的库文件
  */
 (function(exports) {
      "use strict;"
 	//每一个页面都要引入的工具类
-	var CommonTools = require('CommonTools_Core');
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
 	var isSupportTouch = "ontouchend" in document ? true : false;
 	//默认的下拉刷新每一个页面只支持一个,所以是单例模式
 	var instance;
@@ -376,13 +377,17 @@
 		}
 		return instance;
 	};
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来	
-	window.PullToRefreshSkinNative = exports;
+		define(function() {
+			return exports;
+		});
+	}
+	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.natives');
 	
 })({});

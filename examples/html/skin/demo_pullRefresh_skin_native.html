@@ -21,7 +21,7 @@
 		<link rel="stylesheet" href="../../css/mui.min.css" />
 		<link rel="stylesheet" href="../../css/common.css" />
 		<link rel="stylesheet" href="../../css/common_search.css" />
-		<link rel="stylesheet" href="../../../src/core/pulltorefresh/PullToRefresh-Skin.css" />
+		<link rel="stylesheet" href="../../css/pulltorefresh.skin.css" />
 	</head>
 
 	<body>
@@ -48,23 +48,19 @@
 	</body>
 	
 	<script type="text/javascript" src="../../js/epoint.moapi.v2.min.js" ></script>
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.IScroll.Probe.js" ></script>
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Native.js"></script>
-	<script type="text/javascript" src="../../../dist/Tools.PullToRefresh.Skin.Default.js"></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.iscroll.probe.js" ></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.skin.native.js"></script>
+	<script type="text/javascript" src="../../../dist/pulltorefresh.skin.default.js"></script>
 	<script type="text/javascript" src="../../js/demo_pullRefresh_skin.js" ></script>
 	
 	<script>
-		//或者在框架内部的别名引入
-		//require('PullToRefresh_IScroll_Probe');
-		//require('PullToRefresh_Skin_Native');
-		//require('PullToRefresh_Skin_Default');
 		
 		window.onload = function() {
 			var baseObj;
 			if(ejs.os.ejs) {
-				baseObj = PullToRefreshSkinNative;
+				baseObj = PullToRefreshTools.skin.natives;
 			} else {
-				baseObj = PullToRefreshSkinDefault;
+				baseObj = PullToRefreshTools.skin.defaults;
 			}
 			demoPullToRefresh.init(baseObj);
 		};

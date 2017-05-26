@@ -60,7 +60,7 @@
 		//初始化下拉刷新是异步进行的,回调后才代表下拉刷新可以使用
 		//因为用了sea.js中的require.async
 		//第一个
-		PullToRefreshTools.initPullDownRefresh({
+		PullToRefreshTools.bizlogic.initPullDownRefresh({
 			'targetPullToRefresh': pullToRefreshBase,
 			isDebug: false,
 			//IScroll配置相关
@@ -86,7 +86,7 @@
 			pullToRefresh1 = pullToRefresh;
 		});
 		//第二个
-		PullToRefreshTools.initPullDownRefresh({
+		PullToRefreshTools.bizlogic.initPullDownRefresh({
 			'targetPullToRefresh': pullToRefreshBase,
 			isDebug: false,
 			//IScroll配置相关

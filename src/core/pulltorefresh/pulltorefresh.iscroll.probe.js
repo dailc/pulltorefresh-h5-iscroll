@@ -2199,7 +2199,6 @@
 		define(function() { return IScroll; });
 	} 
 	
-	//默认暴露
 	window.IScroll = IScroll;
 
 })(window, document, Math);

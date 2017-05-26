@@ -1,18 +1,19 @@
 /**
- * @description   移动开发框架
- * @author dailc  dailc 
- * @version 4.0
- * @time 2017-01-18
- * 下拉刷新的业务实现，里面会自动帮助进行接口请求，数据处理等，依赖于模板处理工具 Mustache
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 下拉刷新的业务实现，里面会自动帮助进行接口请求，数据处理等，依赖于模板处理工具 Mustache
  * 一般结合下拉刷新皮肤使用
  * 由于涉及到了业务，所以基于mui的js文件的
  */
 (function(exports) {
-	var CommonTools = require('CommonTools_Core');
-	//全局下拉刷新实际对象,这个根据不同的皮肤类型自定义加载
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
+	// 全局下拉刷新实际对象,这个根据不同的皮肤类型自定义加载
 	var PullToRefreshBase;
 
-	//判断是否支持tap
+	// 判断是否支持tap
 	var touchSupport = ('ontouchstart' in document);
 	var tapEventName = touchSupport ? 'tap' : 'click';
 	/**
@@ -493,12 +494,17 @@
 		return instance;
 	};
 	
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshTools = exports;
+		define(function() {
+			return exports;
+		});
+	}
+	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'bizlogic');
+	
 })({});

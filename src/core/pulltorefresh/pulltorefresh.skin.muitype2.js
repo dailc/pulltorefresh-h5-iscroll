@@ -1,15 +1,15 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 这个系列下拉刷新和前面的几个type不一样，这个系列是直接基于mui.js的 Iscroll的
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 这个系列下拉刷新和前面的几个type不一样，这个系列是直接基于mui.js的 Iscroll的
  * 所以不再基于以前那个core基类
  * 依赖 PullToRefresh_Skin_Css
  */
 (function(exports) {
-     var CommonTools = require('CommonTools_Core');
-
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
 	//一些常数
 	var EVENT_START = 'touchstart';
 	var EVENT_MOVE = 'touchmove';
@@ -438,7 +438,7 @@
 		//用到了mui的dom
 		endPullUpToRefresh: function(finished) {
 			if(!this.options.up) {
-				return ;
+				return;
 			}
 			if(finished) {
 				this.finished = true;
@@ -479,13 +479,28 @@
 		var instance = new exports.PullToRefresh(element, options);
 		return instance;
 	};
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshSkinMuiType2 = exports;
+		define(function() {
+			return exports;
+		});
+	}
 	
+	/**
+	 * 兼容require
+	 */
+	if(typeof module != 'undefined' && module.exports) {
+		module.exports = exports;
+	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
+		define(function() {
+			return exports;
+		});
+	}
+	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.muitype2');
+
 })({});

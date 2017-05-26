@@ -1,15 +1,16 @@
 /**
- * @description  基于IScroll实现的下拉刷新
- * @author dailc
- * @version 4.0
- * @time 2017-03-25
- * 这个系列下拉刷新和前面的几个type不一样，这个系列是直接基于mui.js的 Iscroll的
+ * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 这个系列下拉刷新和前面的几个type不一样，这个系列是直接基于mui.js的 Iscroll的
  * 这个是默认的mui default皮肤，这个皮肤比较特别，是一个单例(因为兼容了5+ Android下双webview的优化)
  * 依赖mui的css
  */
 (function(exports) {
-     "use strict";
-	var CommonTools = require('CommonTools_Core');
+    "use strict";
+	var CommonTools = require('Core_Common');
+	var NameSpace = require('Core_NameSpace');
 	//默认的下拉刷新每一个页面只支持一个,所以是单例模式
 	var instance;
 	/**
@@ -208,12 +209,16 @@
 		return instance;
 	};
 	
-	//兼容require
+	/**
+	 * 兼容require
+	 */
 	if(typeof module != 'undefined' && module.exports) {
 		module.exports = exports;
 	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() { return exports; });
-	} 
-	//默认就暴露出来
-	window.PullToRefreshSkinMuiDefault = exports;
+		define(function() {
+			return exports;
+		});
+	}
+	
+	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.muidefault');
 })({});
