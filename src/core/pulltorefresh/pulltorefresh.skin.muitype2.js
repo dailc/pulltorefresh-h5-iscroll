@@ -68,7 +68,7 @@
 	};
 
 	//创建一个Class对象
-	var PullToRefresh = CommonTools.Class.extend({
+	var PullToRefresh = CommonTools.Clazz.extend({
 		/**
 		 * @description Class构造时会自动执行对象的init函数
 		 * @param {HTMLElement||String} element 下拉刷新对象,对应scroll的dom结构对象

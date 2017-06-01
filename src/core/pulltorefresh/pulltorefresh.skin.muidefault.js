@@ -88,10 +88,8 @@
 		//console.log("options:"+	muiOptions.pullRefresh.down.callback.toString());
 		//执行mui的初始化
 		mui.init(muiOptions);
-		CommonTools.initReady(function() {
-			//已经准备好了
-			that.initData();
-		});
+		//已经准备好了
+		that.initData();
 	};
 	/**
 	 * @description 初始化一些事

@@ -4,6 +4,7 @@ const path = require('path'); // 导入路径包
 module.exports = {
 	// 基于src根路径进行别名替换,使用项目根路径
 	'Core_Common': path.join(__dirname, "./src/core/tools/common.js"),
+	'Core_HandleData': path.join(__dirname, "./src/core/tools/handedata.js"),
 	// 命名空间
 	'Core_NameSpace': path.join(__dirname, "./src/core/tools/namespace.js"),
 	// 下拉刷新基于的 IScroll

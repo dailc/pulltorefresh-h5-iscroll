@@ -9,6 +9,7 @@
  */
 (function(exports) {
 	var CommonTools = require('Core_Common');
+	var HandleData = require('Core_HandleData');
 	var NameSpace = require('Core_NameSpace');
 	// 全局下拉刷新实际对象,这个根据不同的皮肤类型自定义加载
 	var PullToRefreshBase;
@@ -425,7 +426,7 @@
 	PullDownRefresh.prototype.defaultChangeResponseData = function(response) {
 		var self = this;
 		//数据都使用通用处理方法
-		var result = CommonTools.handleStandardResponse(response, 1);
+		var result = HandleData.handleStandardResponse(response, 1);
 		return result.data;
 	};
 	/**
