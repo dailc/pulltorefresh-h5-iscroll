@@ -4,25 +4,25 @@
 ### Effect(效果)
 
 * 效果1
-![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect1.gif)
+![](https://dailc.github.io/pulltorefresh-h5-iscroll/staticresource/img/effect1.gif)
 
 * 效果2
-![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect2.gif)
+![](https://dailc.github.io/pulltorefresh-h5-iscroll/staticresource/img/effect2.gif)
 
 * 效果3
-![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect3.gif)
+![](https://dailc.github.io/pulltorefresh-h5-iscroll/staticresource/img/effect3.gif)
 
 * 效果4
-![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect4.gif)
+![](https://dailc.github.io/pulltorefresh-h5-iscroll/staticresource/img/effect4.gif)
 
 * 效果5
-![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect5.gif)
+![](https://dailc.github.io/pulltorefresh-h5-iscroll/staticresource/img/effect5.gif)
 
 * 效果6
-![](https://dailc.github.io/pullToRefresh-h5-iscroll/staticresource/img/effect6.gif)
+![](https://dailc.github.io/pulltorefresh-h5-iscroll/staticresource/img/effect6.gif)
 
 * 示例页面
-[下拉刷新皮肤示例](https://dailc.github.io/pullToRefresh-h5-iscroll/examples/html/)
+[下拉刷新皮肤示例](https://dailc.github.io/pulltorefresh-h5-iscroll/examples/html/)
 
 ### How To Use(使用)
 
@@ -119,8 +119,8 @@
 
 ### 更多说明
 
-* [examples目录结构说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/examples/html)
-* [源码使用说明](https://github.com/dailc/pullToRefresh-h5-iscroll/tree/master/src/)
+* [examples目录结构说明](https://github.com/dailc/pulltorefresh-h5-iscroll/tree/master/examples/html)
+* [源码使用说明](https://github.com/dailc/pulltorefresh-h5-iscroll/tree/master/src/)
 
 #### 相关博文
 
@@ -141,5 +141,7 @@
 * 20170601
 	* 内部源码优化
 	* 不影响以前的使用
+* 20170608
+	* 修改项目名称，同步修改示例资源路径
 
 ## License (MIT)
