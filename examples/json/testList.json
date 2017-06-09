@@ -32,11 +32,11 @@
                 "InfoDate": "17-04-06 03:20:44",
                 "type": "type5"
             }
-        ],
-        "status": {
-            "code": 200,
-            "text": "成功",
-            "url": ""
-        }
+        ]
+    },
+    "status": {
+        "code": 200,
+        "text": "成功",
+        "url": ""
     }
 }
