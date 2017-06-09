@@ -92,7 +92,7 @@
 			//scroll的dom-wrapper下的第一个节点
 			this.scrollWrap = this.element.children[0];
 			//生成一个IScroll对象 
-			this.scroller = new IScroll(this.element, { probeType: 2, tap: true, mouseWheel: true ,eventPassthrough:this.options.scroll.eventPassthrough});
+			this.scroller = new IScroll(this.element, { probeType: 2, tap: false, mouseWheel: true ,eventPassthrough:this.options.scroll.eventPassthrough});
 
 			this._initParams();
 			this._initPullToRefreshTipsHook && this._initPullToRefreshTipsHook(this.enablePullDown, this.enablePullUp);
