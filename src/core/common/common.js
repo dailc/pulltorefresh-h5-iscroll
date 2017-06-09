@@ -151,37 +151,7 @@
 			}
 			return this;
 		};
-		/**
-		 * setTimeout封装
-		 * @param {Object} fn
-		 * @param {Object} when
-		 * @param {Object} context
-		 * @param {Object} data
-		 */
-		exports.later = function(fn, when, context, data) {
-			when = when || 0;
-			var m = fn;
-			var d = data;
-			var f;
-			var r;
-
-			if(typeof fn === 'string') {
-				m = context[fn];
-			}
-
-			f = function() {
-				m.apply(context, exports.isArray(d) ? d : [d]);
-			};
-
-			r = setTimeout(f, when);
-
-			return {
-				id: r,
-				cancel: function() {
-					clearTimeout(r);
-				}
-			};
-		};
+		
 		var class2type = {};
 		exports.each(['Boolean', 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error'], function(i, name) {
 			class2type["[object " + name + "]"] = name.toLowerCase();

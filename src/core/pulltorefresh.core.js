@@ -33,7 +33,6 @@
     var CommonTools = require('Core_Common');
     var NameSpace = require('Core_NameSpace');
 	//基于IScroll 暂时单独剥离IScroll
-	//require('PullToRefresh_IScroll_Probe');
 
 	/**
 	 * 默认的设置参数
