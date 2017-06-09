@@ -30,7 +30,7 @@ function walk(dir, root) {
 			let fullpath = path.join(directory, file);
 			let stat = fs.statSync(fullpath);
 			let extname = path.extname(fullpath);
-			if(stat.isDirectory() && file !== 'core' && file !== 'lib' && file !== 'static' && file !== 'config') {
+			if(stat.isDirectory() && file !== 'core' && file !== 'lib' && file !== 'img' && file !== 'css') {
 				let subdir = path.join(dir, file);
 				walk(subdir, root);
 			} else if(stat.isFile() && (extname === '.js')) {
