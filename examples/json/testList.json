@@ -1,36 +1,42 @@
 {
-	"data": [
-		{
-			"InfoID": "id0",
-			"Title": "tab1标题0",
-			"InfoDate": "17-04-06 03:20:44",
-			"type": "type1"
-		}, {
-			"InfoID": "id1",
-			"Title": "tab1标题1",
-			"InfoDate": "17-04-06 03:20:44",
-			"type": "type1"
-		}, {
-			"InfoID": "id2",
-			"Title": "tab1标题2",
-			"InfoDate": "17-04-06 03:20:44",
-			"type": "type1"
-		}, {
-			"InfoID": "id3",
-			"Title": "tab1标题3",
-			"InfoDate": "17-04-06 03:20:44",
-			"type": "type1"
-		}, {
-			"InfoID": "id4",
-			"Title": "tab1标题4",
-			"InfoDate": "17-04-06 03:20:44",
-			"type": "type4"
-		}, {
-			"InfoID": "id5",
-			"Title": "tab1标题5",
-			"InfoDate": "17-04-06 03:20:44",
-			"type": "type5"
-		}
-	],
-	"code": 1
+    "custom": {
+        "list": [
+            {
+                "InfoID": "id0",
+                "Title": "tab1标题0",
+                "InfoDate": "17-04-06 03:20:44",
+                "type": "type1"
+            }, {
+                "InfoID": "id1",
+                "Title": "tab1标题1",
+                "InfoDate": "17-04-06 03:20:44",
+                "type": "type1"
+            }, {
+                "InfoID": "id2",
+                "Title": "tab1标题2",
+                "InfoDate": "17-04-06 03:20:44",
+                "type": "type1"
+            }, {
+                "InfoID": "id3",
+                "Title": "tab1标题3",
+                "InfoDate": "17-04-06 03:20:44",
+                "type": "type1"
+            }, {
+                "InfoID": "id4",
+                "Title": "tab1标题4",
+                "InfoDate": "17-04-06 03:20:44",
+                "type": "type4"
+            }, {
+                "InfoID": "id5",
+                "Title": "tab1标题5",
+                "InfoDate": "17-04-06 03:20:44",
+                "type": "type5"
+            }
+        ],
+        "status": {
+            "code": 200,
+            "text": "成功",
+            "url": ""
+        }
+    }
 }
