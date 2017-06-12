@@ -79,7 +79,7 @@
 			//注意,传给Mui时可以传 #id形式或者是  原生dom对象
 			pullrefreshId: 'pullrefresh',
 			//下拉刷新后的延迟访问时间,单位为毫秒
-			delyTime: 300,
+			delayTime: 300,
 			//ajax请求有关的设置,包括accept,contentType等
 			ajaxSetting: {
 				//请求类别,默认为POST
@@ -173,10 +173,10 @@
 			self.loadingDown = true;
 			self.currPage = self.options.bizlogic.defaultInitPageNum;
 
-			//延迟delyTime毫秒访问
+			//延迟delayTime毫秒访问
 			setTimeout(function() {
 				self.ajaxRequest();
-			}, self.options.bizlogic.delyTime);
+			}, self.options.bizlogic.delayTime);
 
 			//下拉刷新回调
 			self.options.bizlogic.refreshCallback && self.options.bizlogic.refreshCallback(true);
@@ -195,7 +195,7 @@
 			self.currPage++;
 			setTimeout(function() {
 				self.ajaxRequest();
-			}, self.delyTime);
+			}, self.delayTime);
 		}
 
 	};

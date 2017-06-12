@@ -77,7 +77,7 @@
         // 默认的下拉刷新容器选择器
         pullrefreshSelector: '#pullrefresh',
         // 下拉刷新后的延迟访问时间,单位为毫秒
-        delyTime: 0,
+        delayTime: 0,
         // 默认的请求超时时间
         timeOut: 6000,
         /* ajax的Accept,不同的项目中对于传入的Accept是有要求的
@@ -166,10 +166,10 @@
             self.loadingDown = true;
             self.currPage = self.options.initPageIndex;
 
-            // 延迟delyTime毫秒访问
+            // 延迟delayTime毫秒访问
             setTimeout(function() {
                 self.ajaxRequest();
-            }, self.options.delyTime);
+            }, self.options.delayTime);
 
             // 下拉刷新回调
             self.options.refresh && self.options.refresh(true);
@@ -188,7 +188,7 @@
             self.currPage++;
             setTimeout(function() {
                 self.ajaxRequest();
-            }, self.options.delyTime);
+            }, self.options.delayTime);
         }
 
     };
