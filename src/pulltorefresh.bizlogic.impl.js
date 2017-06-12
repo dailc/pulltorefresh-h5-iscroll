@@ -480,15 +480,15 @@
 	 * 因为皮肤是通过异步加载的,所以必须通过回调进行
 	 */
 	exports.initPullDownRefresh = function(options, callback) {
-		//参数合并,深层次合并
+		// 参数合并,深层次合并
 		options = CommonTools.extend(true, {}, defaultSettingOptions, options);
 
-		if(!options.targetPullToRefresh) {
+		if(!options.targetPullToRefresh && !options.skin) {
 			console.error("错误:传入的下拉刷新皮肤错误,超出范围!");
 			return;
 		}
-		//生成下拉刷新对象
-		PullToRefreshBase = options.targetPullToRefresh;
+		// 生成下拉刷新对象
+		PullToRefreshBase = options.targetPullToRefresh || options.skin;
 		var instance = new PullDownRefresh(options);
 		callback && callback(instance);
 		// 同步也返回

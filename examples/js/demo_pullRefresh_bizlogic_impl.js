@@ -11,7 +11,7 @@
 	 */
 	function initPullRefreshList(isAuto) {
 		var pullToRefreshObj = PullToRefreshTools.bizlogic.initPullDownRefresh({
-			'targetPullToRefresh': pullToRefreshBase,
+			'skin': pullToRefreshBase,
 			'isDebug': false,
 			'bizlogic': {
 				defaultInitPageNum: 0,

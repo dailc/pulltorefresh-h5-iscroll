@@ -61,7 +61,7 @@
 		//因为用了sea.js中的require.async
 		//第一个
 		PullToRefreshTools.bizlogic.initPullDownRefresh({
-			'targetPullToRefresh': pullToRefreshBase,
+			'skin': pullToRefreshBase,
 			isDebug: false,
 			//IScroll配置相关
 			scroll: {
@@ -87,7 +87,7 @@
 		});
 		//第二个
 		PullToRefreshTools.bizlogic.initPullDownRefresh({
-			'targetPullToRefresh': pullToRefreshBase,
+			'skin': pullToRefreshBase,
 			isDebug: false,
 			//IScroll配置相关
 			scroll: {

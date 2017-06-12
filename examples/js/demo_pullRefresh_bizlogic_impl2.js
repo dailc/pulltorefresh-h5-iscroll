@@ -12,7 +12,7 @@
      */
     function initPullRefreshList(isAuto) {
         var pullToRefreshObj = PullToRefreshTools.bizlogic.initPullDownRefresh({
-            'targetPullToRefresh': pullToRefreshBase,
+            'skin': pullToRefreshBase,
             "method": 'GET',
             'initPageIndex': 0,
             'url': '../../json/testList.json',
@@ -38,7 +38,7 @@
     // 简单调用
     function initPullRefreshList2(isAuto) {
         PullToRefreshTools.bizlogic.initPullDownRefresh({
-            'targetPullToRefresh': pullToRefreshBase,
+            'skin': pullToRefreshBase,
            
         });
     }

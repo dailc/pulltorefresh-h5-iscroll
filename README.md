@@ -145,5 +145,7 @@
 	* 修改项目名称，同步修改示例资源路径
 * 20170609
     * 源码目录结构微调，不影响使用
+* 20170612
+    * showcase将`targetPullToRefresh`简化为`skin`(不影响原来使用)
 
 ## License (MIT)

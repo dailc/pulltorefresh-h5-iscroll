@@ -487,12 +487,12 @@
         // 参数合并,深层次合并
         options = CommonTools.extend(true, {}, defaultSettingOptions, options);
 
-        if(!options.targetPullToRefresh) {
+       if(!options.targetPullToRefresh && !options.skin) {
             console.error("错误:传入的下拉刷新皮肤错误,超出范围!");
             return;
         }
         // 生成下拉刷新对象
-        PullToRefreshBase = options.targetPullToRefresh;
+        PullToRefreshBase = options.targetPullToRefresh || options.skin;
         var instance = new PullDownRefresh(options);
         callback && callback(instance);
         // 同步也返回

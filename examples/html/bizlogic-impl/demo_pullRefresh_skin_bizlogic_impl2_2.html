@@ -53,7 +53,7 @@
 		
 		window.onload = function() {
 		     PullToRefreshTools.bizlogic.initPullDownRefresh({
-		        targetPullToRefresh: PullToRefreshTools.skin.defaults,
+		        skin: PullToRefreshTools.skin.defaults,
 		        url: 'http://115.29.151.25:8012/request.php',
 		        requestData: function(currPage, callback) {
                     var result =  {
