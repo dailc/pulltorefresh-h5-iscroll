@@ -472,28 +472,32 @@
         // 先取默认值，从html配置中获取
         var listDom = document.querySelector(options.listSelector || '#listdata');
         var template = options.template;
-        var litemplateSelector = listDom.getAttribute('data-tpl') || ''; 
+        var litemplateSelector = listDom.getAttribute('data-tpl') || '#item-template'; 
         
         if(typeof template === 'string' && (template.charAt(0) == '.' || template.charAt(0) == '#')) {            
             // 手动传入优先级更高
             litemplateSelector = template;
+            options.template = '';
         }
         
         var litemplateDom = document.querySelector(litemplateSelector);
 
         if(litemplateDom) {
-            options.template = litemplateDom.innerHTML.toString() || '';
+            options.template = options.template || litemplateDom.innerHTML.toString() || '';
         }              
         
         // 参数合并,深层次合并 
-        options = CommonTools.extend(true, {}, defaultSettingOptions, options);
-
-       if(!options.targetPullToRefresh && !options.skin) {
+        options = CommonTools.extend(true, {}, defaultSettingOptions, options);      
+        
+        // 生成下拉刷新对象,有一个默认值
+        PullToRefreshBase = options.targetPullToRefresh || options.skin || PullToRefreshTools.skin.defaults;
+        
+        
+       if(!PullToRefreshBase) {
             console.error("错误:传入的下拉刷新皮肤错误,超出范围!");
             return;
         }
-        // 生成下拉刷新对象
-        PullToRefreshBase = options.targetPullToRefresh || options.skin;
+        
         var instance = new PullDownRefresh(options);
         callback && callback(instance);
         // 同步也返回

@@ -85,7 +85,7 @@
         </div>
 
         <!-- 列表每一个item需要用到的模板 -->
-        <script type="text/template" id="list_item">
+        <script type="text/template" id="item-template">
             <li class="mui-table-view-cell" id="{{InfoID}}">
                 <p class="cell-title">
                     {{Title}}
@@ -119,10 +119,8 @@
                         eventPassthrough: 'horizontal'
                     }
                 },
-                skin: PullToRefreshTools.skin.defaults,
                 method: 'GET',
                 url: '../../json/testList.json',
-                template: '#list_item',
                 itemClick: function(e) {
                     console.log("点击:" + this.id);
                 }
