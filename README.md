@@ -29,10 +29,9 @@
 * Require(引入脚本)
 
 	```
-	<script type="text/javascript" src="../../../dist/pulltorefresh.iscroll.probe.js" ></script>
 	<script type="text/javascript" src="../../../dist/pulltorefresh.skin.default.js"></script>
 	```
-	可以将`Skin.Default`替换为对应的皮肤
+	可以将`skin.default`替换为对应的皮肤
 	
 * HTML Structure(页面结构)
 
@@ -88,34 +87,30 @@
 	关于更多的使用说明(如自定义UI类的实现，请参考最后的更多说明)
 	
 * (Notice)注意
-	* 如果使用了非mui外的皮肤，需要引入样式文件`pulltorefresh.skin.css`
-	* 另外，也支持`require`方式引入，不过webpack打包出来的dist中，就算`require`引入了，也请通过全局变量方式来使用，如`PullToRefreshSkinDefault`
+    * `default`皮肤和`type1`皮肤依赖于`mui.css`
+	* 其它皮肤依赖于样式文件`pulltorefresh.skin.css`
+	* 另外，也支持`require`方式引入，`require`后，请通过全局变量方式来使用，如`PullToRefresh.skin.defaults`
 
 * (Global Variable)相应的全局变量与JS文件
 
 	```
-	IScroll //pulltorefresh.iscroll.probe.js
-	PullToRefreshTools.core //pulltorefresh.core.js
-	PullToRefreshTools.skin.defaults //pulltorefresh.skin.default.js 需要和关键字区分
-	PullToRefreshTools.skin.type1 //pulltorefresh.skin.type1.js
-	PullToRefreshTools.skin.type2 //pulltorefresh.skin.type2.js
-	PullToRefreshTools.skin.type3 //pulltorefresh.skin.type3.js
-	PullToRefreshTools.skin.type4 //pulltorefresh.skin.type4.js
-	PullToRefreshTools.skin.muidefault //pulltorefresh.skin.muidefault.js
-	PullToRefreshTools.skin.muitype1 //pulltorefresh.skin.muitype1.js
-	PullToRefreshTools.skin.muitype2 //pulltorefresh.skin.muitype2.js
-	PullToRefreshTools.skin.muitype3 //pulltorefresh.skin.muitype3.js
-	PullToRefreshTools.skin.natives	//pulltorefresh.skin.native.js 需要和保留字区分
-	PullToRefreshTools.bizlogic	//pulltorefresh.bizlogic.implxx.js 系列，依赖于核心下拉刷新文件(随便一个皮肤即可)
+	IScroll // 内部的IScroll5保留的全局变量
+	PullToRefreshTools.core // pulltorefresh.core.js，可以通过这个文件实现自定义皮肤
+	PullToRefreshTools.skin.defaults // pulltorefresh.skin.default.js 需要和关键字区分
+	PullToRefreshTools.skin.type1 // pulltorefresh.skin.type1.js
+	PullToRefreshTools.skin.type2 // pulltorefresh.skin.type2.js
+	PullToRefreshTools.skin.type3 // pulltorefresh.skin.type3.js
+	PullToRefreshTools.skin.type4 // pulltorefresh.skin.type4.js
+	PullToRefreshTools.skin.natives	// pulltorefresh.skin.native.js 需要和保留字区分
+	PullToRefreshTools.bizlogic	// pulltorefresh.bizlogic.implxx.js 系列，依赖于核心下拉刷新文件(随便一个皮肤即可)
 	```
 	
 
 ### 关于
-除了基于mui的默认皮肤外，其它皮肤都是基于`IScroll5`的，所以打包出来后文件都要大很多(不过可以脱离mui使用)。
+下拉刷新所有皮肤内部都默认引入了IScroll5 **但是进行了一些轻微改动(主要是增加了功能，用来方便下拉刷新的实现，并不影响原本使用)**
+因此如果项目中其它地方有用到IScroll5，无需在引入，直接通过`IScroll`即可使用
 
-另外需要注意的是，其中基于`mui.js`的几个皮肤，里面的`mui.js`是改造过的(因为原版的mui不支持严格模式，babel编译报错的)，实际使用中可以换为自己的mui.js
-
-另外，后续会定期更新皮肤
+后续会定期更新皮肤
 
 ### 更多说明
 
@@ -151,5 +146,6 @@
     * 版本`3.0.0`
     * API设计简化
     * 去除不推荐使用的mui皮肤
+    * IScroll打包到内部
 
 ## License (MIT)

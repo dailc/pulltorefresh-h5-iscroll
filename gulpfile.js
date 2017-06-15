@@ -22,17 +22,11 @@ var releasePath = './dist/';
 
 // 下拉刷新核心文件合并
 gulp.task('core_concat', function() {
-	return gulp.src(['./src/core/pulltorefresh.js', './src/core/pulltorefresh.core.js'])
+	return gulp.src(['./src/core/pulltorefresh.iscroll.probe.js', './src/core/pulltorefresh.js', './src/core/pulltorefresh.core.js'])
 		.pipe(concat('pulltorefresh.core.js'))
 		.pipe(gulp.dest(debugPath));
 });
 
-// 打包IScroll Probe
-gulp.task('pack_iscroll', function() {
-    return gulp.src(['./src/core/pulltorefresh.iscroll.probe.js'])
-        .pipe(concat('pulltorefresh.iscroll.probe.js'))
-        .pipe(gulp.dest(debugPath));
-});
 
 // 打包skin-defult
 gulp.task('pack_skin_default', ['core_concat'], function() {
@@ -123,7 +117,7 @@ gulp.task('resource_uglify', function() {
         .pipe(gulp.dest(releasePath));
 });
 
-gulp.task('pack_debug', ['pack_iscroll', 'pack_skin_default', 'pack_skin_type1', 'pack_skin_type2', 'pack_skin_type3', 'pack_skin_type4', 'pack_skin_native', 'pack_bizlogic_impl', 'pack_resources']);
+gulp.task('pack_debug', ['pack_skin_default', 'pack_skin_type1', 'pack_skin_type2', 'pack_skin_type3', 'pack_skin_type4', 'pack_skin_native', 'pack_bizlogic_impl', 'pack_resources']);
 
 
 gulp.task('pack_release', ['js_uglify', 'clean_css', 'resource_uglify']);

@@ -17,14 +17,6 @@
 * endPullUpToRefresh(finished) //关闭上拉加载动画，重置状态，如果finished，则不允许在上拉，除非再次refresh()
 ```
 
-#### `pulltorefresh.bizlogic.impl`的API
-生成了业务下拉刷新对象后，又对外封装了一层
-
-```
-* refresh() //触发一次上拉加载(一般搜索中用到，搜索完毕后会刷新页面)
-* pullToRefreshInstance //属性，这个是原始的下拉刷新对象引用(可以使用上述的下拉刷新api)
-* 至于生成业务下拉刷新时需要传入的参数，由于与业务耦合，因此不赘述，详情可以参考源码
-```
 
 #### `pulltorefresh.core.js`的API
 这个文件的API主要是用来给具体的皮肤类进行继承与实现。
@@ -44,11 +36,6 @@
 
 ### 源码说明
 
-#### `pulltorefresh.iscroll.probe.js`
-
-* 是最新版本IScroll5中的`iscroll-probe.js`
-* **但是进行了一些轻微改动(主要是增加了功能，用来方便下拉刷新的实现，并不影响原本使用)**
-* 所有这个文件完全可以替代已有的IScroll5
 
 #### `pulltorefresh.skin.css`
 是所有自定义下拉刷新皮肤使用的css样式，这里所有的样式一起打包成了一个文件
@@ -61,12 +48,8 @@
 #### `pulltorefresh.skin.×××.js`
 对应的皮肤实现，所有皮肤实现均继承了上述的下拉刷新核心类，因此皮肤类中只关注UI层面的实现。
 
-#### `pulltorefresh.skin.mui×××.js`
-这个是比较特殊的皮肤类，专门用来适用一些基于mui的项目。
-
-和上述的皮肤不一样，这个皮肤并没有基于核心实现类，而是基于`mui.js`源码中`IScroll`。
-
-详情可以参考示例和源码。
+* `default`和`type1`皮肤依赖于`mui.css`
+* 其它皮肤依赖于`pulltorefresh.skin.css`
 
 #### `pulltorefresh.skin.native.js`
 这个是一个特殊的皮肤，它重新定义了一个简单的下拉刷新。
@@ -107,6 +90,14 @@ PullToRefreshTools.bizlogic.init({
         console.log("点击:" + this.id);
     }
 });
+```
+
+最终生成的对象开放的API:
+
+```
+* refresh() //触发一次上拉加载(一般搜索中用到，搜索完毕后会刷新页面)
+* pullToRefreshInstance //属性，这个是原始的下拉刷新对象引用(可以使用上述的下拉刷新api)
+* 至于生成业务下拉刷新时需要传入的参数，由于与业务耦合，因此不赘述，详情可以参考源码或示例
 ```
 
 ### 如何自定义实现皮肤
