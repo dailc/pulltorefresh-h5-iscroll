@@ -1,15 +1,250 @@
 /**
  * 作者: dailc
+ * 创建时间: 2017-03-28
+ * 版本: [1.0, 2017/05/26 ]
+ * 版权: dailc
+ * 描述: 数据处理的通用方法封装
+ */
+(function(exports, CommonTools) {
+    /**
+     * @description 统一处理返回数据,返回数据必须符合标准才行,否则会返回错误提示
+     * @param {JSON} response 接口返回的数据
+     * @param {Number} type = [0|1|2]  类别,兼容字符串形式
+     * 0:返回校验信息-默认是返回业务处理校验信息
+     * 1:返回列表
+     * 2:返回详情
+     * 其它:无法处理,会返回对应错误信息
+     * @return {JSON} 返回的数据,包括多个成功数据,错误提示等等
+     */
+    exports.handleStandardResponse = function(response, type) {
+        var returnValue = {
+            // code默认为0代表失败
+            code: 0,
+            // 描述默认为空
+            message: '',
+            // 数据默认为空
+            data: null,
+            // 一些数据详情,可以调试用
+            debugInfo: {
+                type: '未知数据格式'
+            }
+        };
+        type = type || 0;
+        if(!response) {
+            returnValue.message = '接口返回数据为空!';
+            return returnValue;
+        }
+        if(response && response.ReturnInfo) {
+            // V6格式数据处理
+            returnValue = handleV6Data(response, type, returnValue);
+        } else if(response && response.custom && response.status) {
+            // v7规范
+            returnValue = handleV7Data(response, type, returnValue);
+        } else {
+            // 数据格式不对
+            returnValue.code = 0;
+            returnValue.message = '接口数据返回格式不正确,不是V6也不是V7!';
+            // 装载数据可以调试
+            returnValue.debugInfo.data = response;
+        }
+
+        return returnValue;
+    };
+    /**
+     * @description 处理V6返回数据
+     * @param {JSON} response 接口返回的数据
+     * @param {Number} type = [0|1|2]  类别,兼容字符串形式
+     * @param {JSON} returnValue 返回数据
+     * 0:返回校验信息-默认是返回业务处理校验信息
+     * 1:返回列表
+     * 2:返回详情
+     * 其它:无法处理,会返回对应错误信息
+     * @return {JSON} 返回的数据,包括多个成功数据,错误提示等等
+
+     */
+    function handleV6Data(response, type, returnValue) {
+        var debugInfo = {
+            type: 'V6数据格式'
+        };
+        // 默认的
+        if(response && response.ReturnInfo && response.ReturnInfo.Code == '1') {
+            // 程序没有错误,判读是否业务错误
+            if(response && response.BusinessInfo && response.BusinessInfo.Code == '1') {
+                debugInfo.errorType = 'null';
+                // 业务也没有错误,开始判断类型
+                var tips = '接口请求成功,后台业务逻辑处理成功!';
+                if(response && response.BusinessInfo && response.BusinessInfo.Description) {
+                    // 如果存在自己的信息
+                    tips = response.BusinessInfo.Description;
+                }
+                returnValue.message = tips;
+                if(type === 0 || type === '0') {
+                    returnValue.code = 1;
+                    returnValue.data = response.UserArea;
+                } else if(type === 1 || type === '1') {
+                    // 列表
+                    if(response && response.UserArea) {
+                        returnValue.code = 1;
+                        // 如果UserArea本身就是列表
+                        if(Array.isArray(response.UserArea)) {
+                            returnValue.data = response.UserArea;
+                        } else if(response.UserArea.InfoList && response.UserArea.InfoList[0] && response.UserArea.InfoList[0].Info) {
+                            // 如果是兼容列表
+                            var outArray = [];
+                            for(var i = 0, len = response.UserArea.InfoList.length; i < len; i++) {
+                                outArray.push(response.UserArea.InfoList[i].Info);
+                            }
+                            returnValue.data = outArray;
+                        } else {
+                            returnValue.data = null;
+                            // 否则普通列表-便利每一个节点,如果是InfoList,直接返回,否则继续找
+                            for(var obj in response.UserArea) {
+                                if(Array.isArray(response.UserArea[obj])) {
+                                    returnValue.data = response.UserArea[obj];
+                                    if(obj === 'InfoList') {
+                                        // 遇到正确节点直接退出
+                                        break;
+                                    }
+                                } else {
+                                    if(obj === 'InfoList') {
+                                        if(response.UserArea[obj] && response.UserArea[obj].Info) {
+                                            returnValue.data = response.UserArea[obj].Info;
+                                        } else {
+                                            returnValue.data = response.UserArea[obj];
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        returnValue.code = 0;
+                        returnValue.message = '接口返回列表数据格式不符合规范!';
+                    }
+                } else if(type === 2 || type === '2') {
+                    // 详情
+                    if(response && response.UserArea) {
+                        returnValue.code = 1;
+                        // 详情数据
+                        var tmp = 0;
+                        for(var obj in response.UserArea) {
+                            tmp++;
+                            returnValue.data = response.UserArea[obj];
+                        }
+                        if(tmp > 1) {
+                            // 如果有多个数据,直接使用UserArea
+                            returnValue.data = response.UserArea;
+                        }
+                    } else {
+                        returnValue.code = 0;
+                        returnValue.message = '接口返回详情数据格式不符合规范!';
+                    }
+                } else {
+                    returnValue.code = 0;
+                    returnValue.message = '处理接口数据错误,传入类别不在处理范围!';
+                }
+
+            } else {
+                // 2代表业务错误
+                debugInfo.errorType = '2';
+                // 业务错误
+                returnValue.code = 0;
+                var tips = '接口请求错误,后台业务逻辑处理出错!';
+                if(response && response.BusinessInfo && response.BusinessInfo.Description) {
+                    // 如果存在自己的错误信息
+                    tips = response.BusinessInfo.Description;
+                }
+                returnValue.message = tips;
+            }
+
+        } else {
+            // 1代表程序错误
+            debugInfo.errorType = '1';
+            // 程序错误
+            returnValue.code = 0;
+            var tips = '接口请求错误,后台程序处理出错!';
+            if(response && response.ReturnInfo && response.ReturnInfo.Description) {
+                //如果存在自己的程序错误信息
+                tips = response.ReturnInfo.Description;
+            }
+            returnValue.message = tips;
+        }
+        returnValue.status = returnValue.code;
+        returnValue.debugInfo = debugInfo;
+        return returnValue;
+    }
+
+    /**
+     * @description 处理V7返回数据
+     * @param {JSON} response 接口返回的数据
+     * @param {Number} type = [0|1|2]  类别,兼容字符串形式
+     * type  v7里不影响,所以传什么都无所谓
+     * @param {JSON} returnValue 返回数据
+     * 0:返回校验信息-默认是返回业务处理校验信息
+     * 1:返回列表
+     * 2:返回详情
+     * 其它:无法处理,会返回对应错误信息
+     * @return {JSON} 返回的数据,包括多个成功数据,错误提示等等
+
+     */
+    function handleV7Data(response, type, returnValue) {
+        // 存储debuginfo 以供调试
+        var debugInfo = {
+            type: 'V7数据格式'
+        };
+        // 对应状态码
+        returnValue.status = 0;
+        if(response && response.status) {
+            returnValue.status = response.status.code;
+            returnValue.message = response.status.text;
+            if(response.status.code == '200') {
+                // 状态为200才代表成功
+                returnValue.code = 1;
+                // type为1为列表数据
+                if(type == 1) {
+                    if(response.custom && (response.custom.list || response.custom.infoList)) {
+                        returnValue.data = response.custom.list || response.custom.infoList;
+                    } else {
+                        returnValue.code = 0;
+                        // 重新定义提示，方便锁定
+                        returnValue.message = '列表接口返回数据不符合标准规范！';
+                    }
+                } else if(type == 2) {
+                    if(response.custom) {
+                        returnValue.data = response.custom;
+                    } else {
+                        returnValue.code = 0;
+                        // 重新定义提示，方便锁定
+                        returnValue.message = '详情接口返回的数据为空！';
+                    }
+                } else {
+                    returnValue.data = response.custom;
+                }
+            } else {
+                // 请求失败的情况暂时使用接口返回的默认提示
+                returnValue.code = 0;
+            }
+        } else {
+            returnValue.code = 0;
+            returnValue.message = '接口请求错误,缺少status节点!';
+        }
+        returnValue.debugInfo = debugInfo;
+        return returnValue;
+    }
+    
+    CommonTools.namespace('bizlogic.handleStandardResponse', exports.handleStandardResponse);
+})({}, PullToRefreshTools);
+/**
+ * 作者: dailc
  * 创建时间: 2017/03/28
  * 版本: [1.0, 2017/05/26 ]
  * 版权: dailc
  * 描述: 下拉刷新的业务的第2中实现
  * 仍然基于公司的标准接口(handdata里的v6和v7)
  */
-(function(exports) {
-    var CommonTools = require('Core_Common');
-    var HandleData = require('Core_HandleData');
-    var NameSpace = require('Core_NameSpace');
+(function(exports, CommonTools) {
+    var handleStandardResponse = CommonTools.bizlogic.handleStandardResponse;
+    
     // 全局下拉刷新实际对象,这个根据不同的皮肤类型自定义加载
     var PullToRefreshBase;
 
@@ -53,7 +288,7 @@
         // 得到url 要求是一个函数(返回字符串) 或者字符串
         url: null,
         // 得到模板 要求是一个函数(返回字符串) 或者字符串
-        litemplate: null,
+        template: null,
         // 得到请求参数 必须是一个函数,因为会根据不同的分页请求不同的数据,该函数的第一个参数是当前请求的页码
         requestData: null,
         // 改变数据的函数,代表外部如何处理服务器端返回过来的数据
@@ -373,17 +608,17 @@
                     for(var i = 0; i < response.length; i++) {
                         var value = response[i];
                         // 默认模版
-                        var litemplate = "";
-                        if(self.options.litemplate) {
-                            if(typeof(self.options.litemplate) === "string") {
+                        var template = "";
+                        if(self.options.template) {
+                            if(typeof(self.options.template) === "string") {
                                 // 如果模板是字符串
-                                litemplate = self.options.litemplate;
-                            } else if(typeof(self.options.litemplate) === "function") {
+                                template = self.options.template;
+                            } else if(typeof(self.options.template) === "function") {
                                 // 如果模板是函数
-                                litemplate = self.options.litemplate(value);
+                                template = self.options.template(value);
                             }
                         }
-                        var output = Mustache.render(litemplate, value);
+                        var output = Mustache.render(template, value);
                         outList += output;
                         dataLen++;
                     }
@@ -418,7 +653,7 @@
     PullDownRefresh.prototype.defaultChangeResponseData = function(response) {
         var self = this;
         // 数据都使用通用处理方法
-        var result = HandleData.handleStandardResponse(response, 1);
+        var result = handleStandardResponse(response, 1);
         return result.data;
     };
     /**
@@ -472,19 +707,21 @@
         options = options || {};
         // 先取默认值，从html配置中获取
         var listDom = document.querySelector(options.listSelector || '#listdata');
+        var template = options.template;
         var litemplateSelector = listDom.getAttribute('data-tpl') || ''; 
-        var litemplateDom = document.querySelector(litemplateSelector);
         
-        options.initPageIndex = options.initPageIndex || listDom.getAttribute('initPageIndex') || undefined; 
-        options.pageSize = options.pageSize || listDom.getAttribute('pageSize') || undefined; 
-        options.method = options.method || listDom.getAttribute('method') || undefined; 
-        
-        options.url = options.url || listDom.getAttribute('url') || ''; 
-        if(litemplateDom) {
-            options.litemplate = options.litemplate || litemplateDom.innerHTML.toString() || '';
+        if(typeof template === 'string' && (template.charAt(0) == '.' || template.charAt(0) == '#')) {            
+            // 手动传入优先级更高
+            litemplateSelector = template;
         }
         
-        // 参数合并,深层次合并
+        var litemplateDom = document.querySelector(litemplateSelector);
+
+        if(litemplateDom) {
+            options.template = litemplateDom.innerHTML.toString() || '';
+        }              
+        
+        // 参数合并,深层次合并 
         options = CommonTools.extend(true, {}, defaultSettingOptions, options);
 
        if(!options.targetPullToRefresh && !options.skin) {
@@ -498,7 +735,7 @@
         // 同步也返回
         return instance;
     };
-
+    
     /**
      * 兼容require
      */
@@ -508,8 +745,9 @@
         define(function() {
             return exports;
         });
-    }
+    }   
+    
+    CommonTools.namespace('bizlogic.initPullDownRefresh', exports.initPullDownRefresh);
+    CommonTools.namespace('bizlogic.init', exports.initPullDownRefresh);
 
-    NameSpace.generateGlobalObj(window, exports, NameSpace.namespace + 'bizlogic');
-
-})({});
+})({}, PullToRefreshTools);

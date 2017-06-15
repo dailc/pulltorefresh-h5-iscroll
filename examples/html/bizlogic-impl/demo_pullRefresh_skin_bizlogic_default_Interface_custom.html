@@ -2,63 +2,182 @@
         作者：dailc
         时间：2017-04-05
         描述：  这个是结合业务的下拉刷新示例
-    	业务文件默认暴露  PullToRefreshTools
-    	下拉刷新皮肤 分别保留 PullToRefreshSkin(类别) 如PullToRefreshSkinDefault
-    	也可以换为其它皮肤试一试
-    	bizgolic依赖于mui.js与mustache
-    	
-    	default-基于实际接口
-    	这里的业务接口处理进行了自定义
+        这个是实际接口的实现，这里面涉及到处理复杂数据
 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
-		
-		<title>下拉刷新皮肤 bizlogic-default</title>
-		<link rel="stylesheet" href="../../css/mui.min.css" />
-		<link rel="stylesheet" href="../../css/common.css" />
-		<link rel="stylesheet" href="../../css/common_search.css" />
-		
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 
-	</head>
+        <title>下拉刷新皮肤 bizlogic-impl2</title>
+        <link rel="stylesheet" href="../../css/mui.min.css" />
+        <link rel="stylesheet" href="../../css/common.css" />
+        <link rel="stylesheet" href="../../css/common_search.css" />
 
-	<body>
-			<!--下拉刷新容器
-					pullrefresh 和 listdata是下拉刷新组件默认的id
-					简单的调用没有必要修改,如果有自定义修改需求的,请参考详细调用
-				-->
-			<div id="pullrefresh" class="mui-scroll-wrapper mui-content pt0">
-				
-				<div class="mui-scroll">
-					<!--通用样式1 -->
-						<div class="common-input-row common-input-type1">
-							<div class="common-input ">
-								<span class="btn-search mui-icon mui-icon-search" ></span>
-								<input type="text" class="common-input-clear" placeholder="请输入关键字" id="input-searchName">
-							</div>
-						</div>
-					<ul class="mui-table-view" id="listdata">
-	
-					</ul>
-				</div>
-			</div>			
-		
-	</body>
-	<script type="text/javascript" src="../../js/mui.js" ></script>
-	<script type="text/javascript" src="../../js/mustache.min.js" ></script>
-	<script type="text/javascript" src="../../../dist/pulltorefresh.iscroll.probe.js" ></script>
-	<script type="text/javascript" src="../../../dist/pulltorefresh.skin.default.js"></script>
-	<script type="text/javascript" src="../../../dist/pulltorefresh.bizlogic.impl.js" ></script>
-	<script type="text/javascript" src="../../js/demo_pullRefresh_bizlogic_impl_interface_custom.js" ></script>
-	<script>
-		
-		window.onload = function() {
-			demoPullToRefresh.init(PullToRefreshTools.skin.defaults);
-		};
-		
-	</script>
-	
+    </head>
+
+    <body>
+        <div id="pullrefresh" class="mui-scroll-wrapper mui-content pt0">
+            <div class="mui-scroll">
+                <ul class="mui-table-view" id="listdata">
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- 列表每一个item需要用到的模板 -->
+        <script type="text/template" id="list_item">
+            <li class="mui-table-view-cell" id="{{InfoID}}">
+                <p class="cell-title">
+                    {{Title}}
+                </p>
+                <p class="cell-content">
+                    <span class="cell-content-subcontent">
+                </span>
+                    <span class="cell-content-time">
+                    {{InfoDate}}
+                </span>
+                </p>
+            </li>
+        </script>
+    </body>
+    <script type="text/javascript" src="../../js/mui.js"></script>
+    <script type="text/javascript" src="../../js/mustache.min.js"></script>
+    <script type="text/javascript" src="../../../dist/pulltorefresh.iscroll.probe.js"></script>
+    <script type="text/javascript" src="../../../dist/pulltorefresh.skin.default.js"></script>
+    <script type="text/javascript" src="../../../dist/pulltorefresh.bizlogic.impl.js"></script>
+    <script>
+        window.onload = function() {
+            PullToRefreshTools.bizlogic.init({
+                skin: PullToRefreshTools.skin.defaults,
+                url: 'http://115.29.151.25:8012/request.php?action=testListDemoV7',
+                template: '#list_item',
+                requestData: function(currPage, callback) {
+                    return  {
+                            token: 'RXBvaW50X1dlYlNlcml2Y2VfKiojIzA2MDE=',
+                            params: {
+                                pageIndex: currPage,
+                                pageSize: 10,
+                                keyword: 'type1'                               
+                            }                       
+                        };
+                },
+                changeData: function(response) {
+                    var outData = null;
+                    outData = handleStandardResponse(response, 1).data;
+
+                    return outData;
+                },
+                itemClick: function(e) {
+                    console.log("点击:" + this.id);
+                }
+            });
+        };
+
+        (function(exports) {
+            /**
+             * @description 统一处理返回数据,返回数据必须符合标准才行,否则会返回错误提示
+             * @param {JSON} response 接口返回的数据
+             * @param {Number} type = [0|1|2]  类别,兼容字符串形式
+             * 0:返回校验信息-默认是返回业务处理校验信息
+             * 1:返回列表
+             * 2:返回详情
+             * 其它:无法处理,会返回对应错误信息
+             * @return {JSON} 返回的数据,包括多个成功数据,错误提示等等
+             */
+            exports.handleStandardResponse = function(response, type) {
+                var returnValue = {
+                    // code默认为0代表失败
+                    code: 0,
+                    // 描述默认为空
+                    message: '',
+                    // 数据默认为空
+                    data: null,
+                    // 一些数据详情,可以调试用
+                    debugInfo: {
+                        type: '未知数据格式'
+                    }
+                };
+                type = type || 0;
+                if(!response) {
+                    returnValue.message = '接口返回数据为空!';
+                    return returnValue;
+                }
+                if(response && response.custom && response.status) {
+                    // v7规范
+                    returnValue = handleV7Data(response, type, returnValue);
+                } else {
+                    // 数据格式不对
+                    returnValue.code = 0;
+                    returnValue.message = '接口数据返回格式不正确,不是V6也不是V7!';
+                    // 装载数据可以调试
+                    returnValue.debugInfo.data = response;
+                }
+
+                return returnValue;
+            };
+ 
+            /**
+             * @description 处理V7返回数据
+             * @param {JSON} response 接口返回的数据
+             * @param {Number} type = [0|1|2]  类别,兼容字符串形式
+             * type  v7里不影响,所以传什么都无所谓
+             * @param {JSON} returnValue 返回数据
+             * 0:返回校验信息-默认是返回业务处理校验信息
+             * 1:返回列表
+             * 2:返回详情
+             * 其它:无法处理,会返回对应错误信息
+             * @return {JSON} 返回的数据,包括多个成功数据,错误提示等等
+             */
+            function handleV7Data(response, type, returnValue) {
+                // 存储debuginfo 以供调试
+                var debugInfo = {
+                    type: 'V7数据格式'
+                };
+                // 对应状态码
+                returnValue.status = 0;
+                if(response && response.status) {
+                    returnValue.status = response.status.code;
+                    returnValue.message = response.status.text;
+                    if(response.status.code == '200') {
+                        // 状态为200才代表成功
+                        returnValue.code = 1;
+                        // type为1为列表数据
+                        if(type == 1) {
+                            if(response.custom && (response.custom.list || response.custom.infolist)) {
+                                returnValue.data = response.custom.list || response.custom.infolist;
+                            } else {
+                                returnValue.code = 0;
+                                // 重新定义提示，方便锁定
+                                returnValue.message = '列表接口返回数据不符合标准规范！';
+                            }
+                        } else if(type == 2) {
+                            if(response.custom) {
+                                returnValue.data = response.custom;
+                            } else {
+                                returnValue.code = 0;
+                                // 重新定义提示，方便锁定
+                                returnValue.message = '详情接口返回的数据为空！';
+                            }
+                        } else {
+                            returnValue.data = response.custom;
+                        }
+                    } else {
+                        // 请求失败的情况暂时使用接口返回的默认提示
+                        returnValue.code = 0;
+                    }
+                } else {
+                    returnValue.code = 0;
+                    returnValue.message = '接口请求错误,缺少status节点!';
+                }
+                returnValue.debugInfo = debugInfo;
+                return returnValue;
+            }
+
+            window.handleStandardResponse = exports.handleStandardResponse;
+        })({});
+    </script>
+
 </html>

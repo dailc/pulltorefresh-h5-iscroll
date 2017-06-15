@@ -5,7 +5,7 @@
  * 版权: dailc
  * 描述: 数据处理的通用方法封装
  */
-(function(exports) {
+(function(exports, CommonTools) {
     /**
      * @description 统一处理返回数据,返回数据必须符合标准才行,否则会返回错误提示
      * @param {JSON} response 接口返回的数据
@@ -202,8 +202,8 @@
                 returnValue.code = 1;
                 // type为1为列表数据
                 if(type == 1) {
-                    if(response.custom && (response.custom.list || response.custom.infolist)) {
-                        returnValue.data = response.custom.list || response.custom.infolist;
+                    if(response.custom && (response.custom.list || response.custom.infoList)) {
+                        returnValue.data = response.custom.list || response.custom.infoList;
                     } else {
                         returnValue.code = 0;
                         // 重新定义提示，方便锁定
@@ -231,4 +231,6 @@
         returnValue.debugInfo = debugInfo;
         return returnValue;
     }
-})(module.exports = {});
+    
+    CommonTools.namespace('bizlogic.handleStandardResponse', exports.handleStandardResponse);
+})({}, PullToRefreshTools);

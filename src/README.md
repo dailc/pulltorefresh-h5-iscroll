@@ -84,5 +84,30 @@
 
 当然了，实际情况下可以去根据不同业务修改这个源文件，重新打包。
 
+调用示例:
+```
+PullToRefreshTools.bizlogic.init({
+    skin: PullToRefreshTools.skin.defaults,
+    url: 'http://115.29.151.25:8012/request.php',
+    template: '#list_item',
+    requestData: function(currPage, callback) {
+        var result = {
+            action: 'testPullrefreshListDemoV3',
+            paras: {
+                currentpageindex: currPage.toString(),
+                pagesize: 10,
+                tabType: 'tab1',
+                // 搜索值,接口里没有实现,这里可以打印代表搜索值已经获取到
+                searchValue: ''
+            }
+        };
+        return result;
+    },
+    itemClick: function(e) {
+        console.log("点击:" + this.id);
+    }
+});
+```
+
 ### 如何自定义实现皮肤
 参考源码中的skin系列，只需要继承核心类，然后实现对应的UI函数即可。

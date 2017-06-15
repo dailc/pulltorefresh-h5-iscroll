@@ -5,12 +5,10 @@
  * 版权: dailc
  * 描述: 皮肤类只会实现UI相关的hook函数
  * 皮肤 type2 ，不再基于mui的css，而是有自己的资源引用
- * 依赖 PullToRefresh_Skin_Css
+ * 依赖 pulltorefresh.skin.css
  */
-(function(exports) {
-	var CommonTools = require('Core_Common');
-	var NameSpace = require('Core_NameSpace');
-	var PullToRefreshBase = require('PullToRefresh_Core');
+(function(exports, CommonTools) {
+    
 	/**
 	 * 全局参数
 	 */
@@ -55,7 +53,7 @@
 
 	//创建一个Class对象
 	//只需要关注默认的UI实现即可
-	var PullToRefresh = PullToRefreshBase.PullToRefresh.extend({
+	var PullToRefresh = CommonTools.core.extend({
 
 		/*************************************
 		 * 需要实现的实际效果
@@ -286,26 +284,19 @@
 	 */
 	exports.initPullToRefresh = function(element, options) {
 		if(typeof element !== 'string' && !(element instanceof HTMLElement)) {
-			//如果第一个不是options
+			// 如果第一个不是options
 			options = element;
 			element = options['element'];
 		}
 
-		//合并默认参数,这个得用的默认参数
+		// 合并默认参数,这个得用的默认参数
 		options = CommonTools.extend(true, {}, defaultSettingOptions, options);
-		return PullToRefreshBase.initPullToRefresh(PullToRefresh, element, options);
+		
+		return new PullToRefresh(element, options);
 	};
-	/**
-	 * 兼容require
-	 */
-	if(typeof module != 'undefined' && module.exports) {
-		module.exports = exports;
-	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() {
-			return exports;
-		});
-	}
-	
-	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.type2');
+	exports.init = exports.initPullToRefresh;
 
-})({});
+	
+    CommonTools.namespace('skin.type2', exports);
+
+})({}, PullToRefreshTools);

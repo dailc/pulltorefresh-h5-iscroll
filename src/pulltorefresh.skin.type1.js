@@ -7,11 +7,8 @@
  * 默认皮肤，皮肤 type1  为了简化代码已经后续方便就没有再复用default了
  * 依赖mui的css
  */
-(function(exports) {
-	var CommonTools = require('Core_Common');
-	var NameSpace = require('Core_NameSpace');
-	var PullToRefreshBase = require('PullToRefresh_Core');
-
+(function(exports, CommonTools) {
+    
 	//默认的全局参数-主要用来配置下拉刷新提示的一些css class
 	//var NAMESPACE = 'rayapp-';
 	var NAMESPACE = 'mui-';
@@ -80,7 +77,7 @@
 
 	//创建一个Class对象
 	//只需要关注默认的UI实现即可
-	var PullToRefresh = PullToRefreshBase.PullToRefresh.extend({
+	var PullToRefresh = CommonTools.core.extend({
 
 		/*************************************
 		 * 需要实现的实际效果
@@ -364,26 +361,18 @@
 	 */
 	exports.initPullToRefresh = function(element, options) {
 		if(typeof element !== 'string' && !(element instanceof HTMLElement)) {
-			//如果第一个不是options
+			// 如果第一个不是options
 			options = element;
 			element = options['element'];
 		}
-		//合并默认参数,这个得用的默认参数
+		// 合并默认参数,这个得用的默认参数
 		options = CommonTools.extend(true, {}, defaultSettingOptions, options);
-		return PullToRefreshBase.initPullToRefresh(PullToRefresh, element, options);
+		
+		return new PullToRefresh(element, options);
 	};
+	exports.init = exports.initPullToRefresh;
 
-	/**
-	 * 兼容require
-	 */
-	if(typeof module != 'undefined' && module.exports) {
-		module.exports = exports;
-	} else if(typeof define == 'function' && (define.amd || define.cmd)) {
-		define(function() {
-			return exports;
-		});
-	}
 	
-	NameSpace.generateGlobalObj(window, exports, NameSpace.namespace+'skin.type1');
+	CommonTools.namespace('skin.type1', exports);
 
-})({});
+})({}, PullToRefreshTools);

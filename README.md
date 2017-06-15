@@ -48,7 +48,7 @@
 * JS Initialization(JS初始化)
 	
 	```
-	var pullToRefreshObj = PullToRefreshTools.skin.default.initPullToRefresh({
+	var pullToRefreshObj = PullToRefreshTools.skin.default.init({
 	    //这里用默认设置
 	    element: '#pullrefresh',
 	    //down为null表示不要下拉刷新    
@@ -106,7 +106,7 @@
 	PullToRefreshTools.skin.muitype2 //pulltorefresh.skin.muitype2.js
 	PullToRefreshTools.skin.muitype3 //pulltorefresh.skin.muitype3.js
 	PullToRefreshTools.skin.natives	//pulltorefresh.skin.native.js 需要和保留字区分
-	PullToRefreshTools.bizlogic	//pulltorefresh.bizlogic.impl.js
+	PullToRefreshTools.bizlogic	//pulltorefresh.bizlogic.implxx.js 系列，依赖于核心下拉刷新文件(随便一个皮肤即可)
 	```
 	
 
@@ -146,6 +146,10 @@
 * 20170609
     * 源码目录结构微调，不影响使用
 * 20170612
-    * showcase将`targetPullToRefresh`简化为`skin`(不影响原来使用)
+    * showcase将`targetPullToRefresh`简化为`skin`
+* 20170615
+    * 版本`3.0.0`
+    * API设计简化
+    * 去除不推荐使用的mui皮肤
 
 ## License (MIT)
