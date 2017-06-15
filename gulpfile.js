@@ -108,6 +108,7 @@ gulp.task('clean_css', function() {
 //      .pipe(rename({
 //          suffix: '.min'
 //      }))
+    .pipe(header(banner, { pkg : pkg } ))
 		.pipe(gulp.dest(releasePath));
 });
 
