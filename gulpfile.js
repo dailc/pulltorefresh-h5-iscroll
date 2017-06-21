@@ -64,8 +64,8 @@ gulp.task('pack_skin_type4', ['core_concat'], function() {
 });
 
 // 打包skin-native
-gulp.task('pack_skin_native', ['core_concat'], function() {
-    return gulp.src([debugPath + 'pulltorefresh.core.js', './src/pulltorefresh.skin.native.js'])
+gulp.task('pack_skin_native', function() {
+    return gulp.src(['./src/pulltorefresh.skin.native.js'])
         .pipe(concat('pulltorefresh.skin.native.js'))
         .pipe(gulp.dest(debugPath));
 });

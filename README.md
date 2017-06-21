@@ -147,5 +147,7 @@
     * API设计简化
     * 去除不推荐使用的mui皮肤
     * IScroll打包到内部
+* 20170621
+    * 更新`native`皮肤引入时的bug-由于重复打包core，导致命名冲突
 
 ## License (MIT)
