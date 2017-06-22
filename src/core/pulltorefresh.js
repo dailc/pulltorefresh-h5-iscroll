@@ -5,9 +5,12 @@
  * 版权: dailc
  * 描述: 这个工具类都是一些最基本的工具函数
  */
+"use strict";
 
-(function(exports) {
-    /******************通用代码**********************/
+var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefined) {
+    /**
+     * 通用代码
+     */
     (function() {
         /**
          * @description 产生一个 唯一uuid-guid
@@ -305,14 +308,31 @@
             for (var i = 0; i < len - 1; i++) {
                 var tmp = namespaceArr[i];
                 // 不存在的话要重新创建对象
-                parent[tmp] = parent[tmp] || {};             
+                parent[tmp] = parent[tmp] || {};
                 // parent要向下一级
                 parent = parent[tmp];
-                
-            }        
-            parent[namespaceArr[len - 1]] = obj;            
+
+            }
+            parent[namespaceArr[len - 1]] = obj;
 
             return parent[namespaceArr[len - 1]];
+        };
+        /**
+         * @description 获取这个模块下对应命名空间的对象
+         * 如果不存在，则返回null，这个api只要是供内部获取接口数据时调用
+         * @param {Object} module
+         * @param {Array} namespace
+         */
+        exports.getNameSpaceObj = function(module, namespace) {
+            if (!namespace) {
+                return null;
+            }
+            var namespaceArr = namespace.split('.'),
+                len = namespaceArr.length;
+            for (var i = 0; i < len; i++) {
+                module && (module = module[namespaceArr[i]]);
+            }
+            return module;
         };
     })();
 
@@ -327,8 +347,5 @@
         });
     }
 
-    /**
-     * 暴露的工具命名空间
-     */
-    window.PullToRefreshTools = exports;
+    return exports;
 })({});

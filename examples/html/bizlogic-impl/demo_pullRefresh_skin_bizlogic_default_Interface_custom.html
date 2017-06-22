@@ -53,7 +53,7 @@
                 skin: PullToRefreshTools.skin.defaults,
                 url: 'http://115.29.151.25:8012/request.php?action=testListDemoV7',
                 template: '#item-template',
-                requestData: function(currPage, callback) {
+                dataRequest: function(currPage, callback) {
                     return  {
                             token: 'RXBvaW50X1dlYlNlcml2Y2VfKiojIzA2MDE=',
                             params: {
@@ -63,9 +63,12 @@
                             }                       
                         };
                 },
-                changeData: function(response) {
+                dataChange: function(response) {
                     var outData = null;
-                    outData = handleStandardResponse(response, 1).data;
+                    
+                    if (response && response.custom && response.custom.list) {
+                        outData = response.custom.list;
+                    }
 
                     return outData;
                 },
@@ -75,108 +78,6 @@
             });
         };
 
-        (function(exports) {
-            /**
-             * @description 统一处理返回数据,返回数据必须符合标准才行,否则会返回错误提示
-             * @param {JSON} response 接口返回的数据
-             * @param {Number} type = [0|1|2]  类别,兼容字符串形式
-             * 0:返回校验信息-默认是返回业务处理校验信息
-             * 1:返回列表
-             * 2:返回详情
-             * 其它:无法处理,会返回对应错误信息
-             * @return {JSON} 返回的数据,包括多个成功数据,错误提示等等
-             */
-            exports.handleStandardResponse = function(response, type) {
-                var returnValue = {
-                    // code默认为0代表失败
-                    code: 0,
-                    // 描述默认为空
-                    message: '',
-                    // 数据默认为空
-                    data: null,
-                    // 一些数据详情,可以调试用
-                    debugInfo: {
-                        type: '未知数据格式'
-                    }
-                };
-                type = type || 0;
-                if(!response) {
-                    returnValue.message = '接口返回数据为空!';
-                    return returnValue;
-                }
-                if(response && response.custom && response.status) {
-                    // v7规范
-                    returnValue = handleV7Data(response, type, returnValue);
-                } else {
-                    // 数据格式不对
-                    returnValue.code = 0;
-                    returnValue.message = '接口数据返回格式不正确,不是V6也不是V7!';
-                    // 装载数据可以调试
-                    returnValue.debugInfo.data = response;
-                }
-
-                return returnValue;
-            };
- 
-            /**
-             * @description 处理V7返回数据
-             * @param {JSON} response 接口返回的数据
-             * @param {Number} type = [0|1|2]  类别,兼容字符串形式
-             * type  v7里不影响,所以传什么都无所谓
-             * @param {JSON} returnValue 返回数据
-             * 0:返回校验信息-默认是返回业务处理校验信息
-             * 1:返回列表
-             * 2:返回详情
-             * 其它:无法处理,会返回对应错误信息
-             * @return {JSON} 返回的数据,包括多个成功数据,错误提示等等
-             */
-            function handleV7Data(response, type, returnValue) {
-                // 存储debuginfo 以供调试
-                var debugInfo = {
-                    type: 'V7数据格式'
-                };
-                // 对应状态码
-                returnValue.status = 0;
-                if(response && response.status) {
-                    returnValue.status = response.status.code;
-                    returnValue.message = response.status.text;
-                    if(response.status.code == '200') {
-                        // 状态为200才代表成功
-                        returnValue.code = 1;
-                        // type为1为列表数据
-                        if(type == 1) {
-                            if(response.custom && (response.custom.list || response.custom.infolist)) {
-                                returnValue.data = response.custom.list || response.custom.infolist;
-                            } else {
-                                returnValue.code = 0;
-                                // 重新定义提示，方便锁定
-                                returnValue.message = '列表接口返回数据不符合标准规范！';
-                            }
-                        } else if(type == 2) {
-                            if(response.custom) {
-                                returnValue.data = response.custom;
-                            } else {
-                                returnValue.code = 0;
-                                // 重新定义提示，方便锁定
-                                returnValue.message = '详情接口返回的数据为空！';
-                            }
-                        } else {
-                            returnValue.data = response.custom;
-                        }
-                    } else {
-                        // 请求失败的情况暂时使用接口返回的默认提示
-                        returnValue.code = 0;
-                    }
-                } else {
-                    returnValue.code = 0;
-                    returnValue.message = '接口请求错误,缺少status节点!';
-                }
-                returnValue.debugInfo = debugInfo;
-                return returnValue;
-            }
-
-            window.handleStandardResponse = exports.handleStandardResponse;
-        })({});
     </script>
 
 </html>

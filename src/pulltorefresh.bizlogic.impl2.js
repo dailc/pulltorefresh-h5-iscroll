@@ -8,7 +8,7 @@
  * 由于涉及到了业务，所以基于mui的js文件的
  */
 (function(exports, CommonTools) {
-    var handleStandardResponse = CommonTools.bizlogic.handleStandardResponse;
+    var dataProcess = CommonTools.bizlogic.dataProcess;
     
     // 全局下拉刷新实际对象,这个根据不同的皮肤类型自定义加载
     var PullToRefreshBase;
@@ -423,9 +423,10 @@
      * @param {JSON} response
      */
     PullDownRefresh.prototype.defaultChangeResponseData = function(response) {
-        var self = this;
-        //数据都使用通用处理方法
-        var result = handleStandardResponse(response, 1);
+        // 数据都使用通用处理方法
+        var result = dataProcess(response, {
+            dataPath: ['custom.infoList', 'custom.list', 'UserArea.InfoList']
+        });
         return result.data;
     };
     /**

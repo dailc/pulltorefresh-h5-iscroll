@@ -7,7 +7,7 @@
  * 仍然基于公司的标准接口(handdata里的v6和v7)
  */
 (function(exports, CommonTools) {
-    var handleStandardResponse = CommonTools.bizlogic.handleStandardResponse;
+    var dataProcess = CommonTools.bizlogic.dataProcess;
     
     // 全局下拉刷新实际对象,这个根据不同的皮肤类型自定义加载
     var PullToRefreshBase;
@@ -45,7 +45,7 @@
                 contentnomore: '没有更多数据了',
             }
         },
-        method: 'POST',
+        type: 'POST',
         // 默认的请求页面,根据不同项目服务器配置而不同,正常来说应该是0
         initPageIndex: 0,
         pageSize: 10,
@@ -54,10 +54,10 @@
         // 得到模板 要求是一个函数(返回字符串) 或者字符串
         template: null,
         // 得到请求参数 必须是一个函数,因为会根据不同的分页请求不同的数据,该函数的第一个参数是当前请求的页码
-        requestData: null,
+        dataRequest: null,
         // 改变数据的函数,代表外部如何处理服务器端返回过来的数据
         // 如果没有传入,则采用内部默认的数据处理方法
-        changeData: null,
+        dataChange: null,
         // 列表元素点击回调，传入参数是  e,即目标对象
         itemClick: null,
         // 请求成功,并且成功处理后会调用的成功回调方法,传入参数是成功处理后的数据
@@ -68,17 +68,17 @@
         refresh: null,
         // 是否请求完数据后就自动渲染到列表容器中,如果为false，则不会
         // 代表需要自己手动在成功回调中自定义渲染
-        autoRender: true,
+        isAutoRender: true,
         // 表监听元素选择器,默认为给li标签添加标签
         itemSelector: 'li',
         // 默认的列表数据容器选择器
-        listSelector: '#listdata',
+        listContainer: '#listdata',
         // 默认的下拉刷新容器选择器
-        pullrefreshSelector: '#pullrefresh',
+        container: '#pullrefresh',
         // 下拉刷新后的延迟访问时间,单位为毫秒
-        delayTime: 0,
+        delay: 0,
         // 默认的请求超时时间
-        timeOut: 6000,
+        timeout: 6000,
         /* ajax的Accept,不同的项目中对于传入的Accept是有要求的
          * 传入参数,传null为使用默认值
          * 示例
@@ -123,7 +123,7 @@
         var setting = options.setting;
         
         // 先取下拉刷新dom
-        setting.element = document.querySelector(options.pullrefreshSelector);
+        setting.element = document.querySelector(options.container);
         if(setting.down) {
             setting.down.callback = function() {
                 self.pullDownCallback();
@@ -137,7 +137,7 @@
         
         self.pullRefreshContainer = setting.element;
         // 数据容器
-        self.respnoseEl = self.pullRefreshContainer.querySelector(options.listSelector);
+        self.respnoseEl = self.pullRefreshContainer.querySelector(options.listContainer);
         self.options = options; 
         self.setting = setting;
 
@@ -168,7 +168,7 @@
             // 延迟delayTime毫秒访问
             setTimeout(function() {
                 self.ajaxRequest();
-            }, self.options.delayTime);
+            }, self.options.delay);
 
             // 下拉刷新回调
             self.options.refresh && self.options.refresh(true);
@@ -187,7 +187,7 @@
             self.currPage++;
             setTimeout(function() {
                 self.ajaxRequest();
-            }, self.options.delayTime);
+            }, self.options.delay);
         }
 
     };
@@ -209,7 +209,7 @@
     PullDownRefresh.prototype.setElemListeners = function() {
         var self = this;
         if(self.options.itemClick) {
-            mui(self.options.listSelector).on(tapEventName, self.options.itemSelector, self.options.itemClick);
+            mui(self.options.listContainer).on(tapEventName, self.options.itemSelector, self.options.itemClick);
         }
     };
     /**
@@ -284,8 +284,8 @@
             mui.ajax(url, {
                 data: requestData,
                 dataType: "json",
-                timeout: self.options.timeOut,
-                type: self.options.method,
+                timeout: self.options.timeout,
+                type: self.options.type,
                 // 接受的头
                 accepts: self.options.accepts,
                 // 自定义头部
@@ -301,8 +301,8 @@
             });
         };
 
-        if(self.options.requestData) {
-            var requestData = self.options.requestData(self.currPage, function(requestData) {
+        if(self.options.dataRequest) {
+            var requestData = self.options.dataRequest(self.currPage, function(requestData) {
                 next(requestData);
             });
             if(requestData !== undefined) {
@@ -311,7 +311,7 @@
 
         } else {
             if(self.options.isDebug) {
-                console.warn('warning***请注意getData不存在,默认数据为空');
+                console.warn('warning***请注意dataRequest不存在,默认数据为空');
             }
             next();
         }
@@ -350,15 +350,15 @@
         if(self.options.isDebug) {
             console.log('下拉刷新返回数据:' + JSON.stringify(response));
         }
-        if(self.options.changeData) {
+        if(self.options.dataChange) {
             // 如果存在转换数据的函数,用外部提供的
-            response = self.options.changeData(response);
+            response = self.options.dataChange(response);
         } else {
             // 使用默认的数据转换
             response = self.defaultChangeResponseData(response);
         }
 
-        if(self.options.autoRender) {
+        if(self.options.isAutoRender) {
             // 如果自动渲染
             // 如果是下拉加载 先清空
             if(self.isPullDown) {
@@ -415,9 +415,10 @@
      * @param {JSON} response
      */
     PullDownRefresh.prototype.defaultChangeResponseData = function(response) {
-        var self = this;
         // 数据都使用通用处理方法
-        var result = handleStandardResponse(response, 1);
+        var result = dataProcess(response, {
+            dataPath: ['custom.infoList', 'custom.list', 'UserArea.InfoList']
+        });
         return result.data;
     };
     /**
@@ -457,7 +458,7 @@
      */
     PullDownRefresh.prototype.clearResponseEl = function() {
         var self = this;
-        if(self.options.autoRender) {
+        if(self.options.isAutoRender) {
             self.respnoseEl && (self.respnoseEl.innerHTML = '');
         }
     };
@@ -470,7 +471,7 @@
     exports.initPullDownRefresh = function(options, callback) {
         options = options || {};
         // 先取默认值，从html配置中获取
-        var listDom = document.querySelector(options.listSelector || '#listdata');
+        var listDom = document.querySelector(options.listContainer || '#listdata');
         var template = options.template;
         var litemplateSelector = listDom.getAttribute('data-tpl') || '#item-template'; 
         
