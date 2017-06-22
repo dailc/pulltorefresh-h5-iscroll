@@ -217,7 +217,7 @@
      */
     PullDownRefresh.prototype.refresh = function() {
         var self = this;
-        if(!self.setting.up) {
+        if(!self.options.up || !self.pullToRefreshInstance.enablePullUp) {
             // 如果不存在上拉加载
             self.clearResponseEl();
             self.pullDownCallback();

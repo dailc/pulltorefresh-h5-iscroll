@@ -77,6 +77,13 @@ gulp.task('pack_bizlogic_impl', function() {
         .pipe(gulp.dest(debugPath));
 });
 
+// 打包bizlogic-impl
+gulp.task('pack_bizlogic_impl2', function() {
+    return gulp.src(['./src/core/handedata.js', './src/pulltorefresh.bizlogic.impl2.js'])
+        .pipe(concat('pulltorefresh.bizlogic.impl2.js'))
+        .pipe(gulp.dest(debugPath));
+});
+
 
 // 打包 css以及静态资源
 gulp.task('pack_resources', function() {
@@ -118,7 +125,7 @@ gulp.task('resource_uglify', function() {
         .pipe(gulp.dest(releasePath));
 });
 
-gulp.task('pack_debug', ['pack_skin_default', 'pack_skin_type1', 'pack_skin_type2', 'pack_skin_type3', 'pack_skin_type4', 'pack_skin_native', 'pack_bizlogic_impl', 'pack_resources']);
+gulp.task('pack_debug', ['pack_skin_default', 'pack_skin_type1', 'pack_skin_type2', 'pack_skin_type3', 'pack_skin_type4', 'pack_skin_native', 'pack_bizlogic_impl', 'pack_bizlogic_impl2', 'pack_resources']);
 
 
 gulp.task('pack_release', ['js_uglify', 'clean_css', 'resource_uglify']);
