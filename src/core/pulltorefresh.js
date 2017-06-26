@@ -53,6 +53,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          * @returns {unresolved}
          */
         exports.extend = function() { //from jquery2
+            // from jquery2
             var options, name, src, copy, copyIsArray, clone,
                 target = arguments[0] || {},
                 i = 1,
@@ -155,7 +156,17 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
             }
             return this;
         };
+        /**
+         * @description 选择这段代码用到的太多了，因此抽取封装出来
+         * @param {Object} element dom元素或者selector
+         */
+        exports.selector = function(element) {
+            if (typeof element === 'string') {
+                element = document.querySelector(element);
+            }
 
+            return element;
+        };
         var class2type = {};
         exports.each(['Boolean', 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error'], function(i, name) {
             class2type["[object " + name + "]"] = name.toLowerCase();

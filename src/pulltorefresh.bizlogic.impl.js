@@ -7,7 +7,7 @@
  * 仍然基于公司的标准接口(handdata里的v6和v7)
  */
 (function(exports, CommonTools) {
-    var dataProcess = CommonTools.bizlogic.dataProcess;
+    var dataProcess = CommonTools.dataProcess;
     
     // 全局下拉刷新实际对象,这个根据不同的皮肤类型自定义加载
     var PullToRefreshBase;
@@ -18,7 +18,7 @@
     /**
      * 默认的设置参数
      */
-    var defaultSettingOptions = {
+    var defaultSetting = {
         // 是否是debug模式,如果是的话会输出错误提示
         isDebug: false,
         setting: {
@@ -120,10 +120,39 @@
 
     function PullDownRefresh(options) {
         var self = this;
-        var setting = options.setting;
         
-        // 先取下拉刷新dom
-        setting.element = document.querySelector(options.container);
+        // 先取默认值，从html配置中获取
+        var listDom = document.querySelector(options.listContainer || '#listdata');
+        var template = options.template;
+        var litemplateSelector = '#item-template'; 
+        
+        if(typeof template === 'string' && (template.charAt(0) == '.' || template.charAt(0) == '#')) {            
+            // 手动传入优先级更高
+            litemplateSelector = template;
+            options.template = '';
+        }
+        
+        var litemplateDom = document.querySelector(litemplateSelector);
+
+        if(litemplateDom) {
+            options.template = options.template || litemplateDom.innerHTML.toString() || '';
+        }              
+        
+        // 参数合并,深层次合并 
+        options = CommonTools.extend(true, {}, defaultSetting, options);      
+        
+        // 生成下拉刷新对象,有一个默认值
+        PullToRefreshBase = options.skin || PullToRefreshTools.skin.defaults;
+        
+        
+       if(!PullToRefreshBase) {
+            console.error("错误:传入的下拉刷新皮肤错误,超出范围!");
+            return;
+        }
+        
+        var setting = options.setting;
+        setting.container = options.container;
+        
         if(setting.down) {
             setting.down.callback = function() {
                 self.pullDownCallback();
@@ -135,9 +164,8 @@
             };
         }
         
-        self.pullRefreshContainer = setting.element;
         // 数据容器
-        self.respnoseEl = self.pullRefreshContainer.querySelector(options.listContainer);
+        self.respnoseEl = CommonTools.selector(options.listContainer);
         self.options = options; 
         self.setting = setting;
 
@@ -150,8 +178,10 @@
             self.currPage --;
         }
         self.initAllEventListeners();
-        self.pullToRefreshInstance = PullToRefreshBase.initPullToRefresh(options.setting);
         
+        // 需要修改setting的container指向真实container
+        
+        self.pullToRefreshInstance = new PullToRefreshBase(options.setting);     
     }
     /**
      * @description 下拉回调
@@ -465,58 +495,11 @@
     /**
      * @description 初始化下拉刷新
      * @param {JSON} options 传入的参数
-     * @param {Function} 成功生成后,回调下拉刷新对象
-     * 因为皮肤是通过异步加载的,所以必须通过回调进行
      */
-    exports.initPullDownRefresh = function(options, callback) {
-        options = options || {};
-        // 先取默认值，从html配置中获取
-        var listDom = document.querySelector(options.listContainer || '#listdata');
-        var template = options.template;
-        var litemplateSelector = listDom.getAttribute('data-tpl') || '#item-template'; 
-        
-        if(typeof template === 'string' && (template.charAt(0) == '.' || template.charAt(0) == '#')) {            
-            // 手动传入优先级更高
-            litemplateSelector = template;
-            options.template = '';
-        }
-        
-        var litemplateDom = document.querySelector(litemplateSelector);
-
-        if(litemplateDom) {
-            options.template = options.template || litemplateDom.innerHTML.toString() || '';
-        }              
-        
-        // 参数合并,深层次合并 
-        options = CommonTools.extend(true, {}, defaultSettingOptions, options);      
-        
-        // 生成下拉刷新对象,有一个默认值
-        PullToRefreshBase = options.targetPullToRefresh || options.skin || PullToRefreshTools.skin.defaults;
-        
-        
-       if(!PullToRefreshBase) {
-            console.error("错误:传入的下拉刷新皮肤错误,超出范围!");
-            return;
-        }
-        
-        var instance = new PullDownRefresh(options);
-        callback && callback(instance);
-        // 同步也返回
-        return instance;
+    PullDownRefresh.init = function(options) {
+        return new PullDownRefresh(options);
     };
     
-    /**
-     * 兼容require
-     */
-    if(typeof module != 'undefined' && module.exports) {
-        module.exports = exports;
-    } else if(typeof define == 'function' && (define.amd || define.cmd)) {
-        define(function() {
-            return exports;
-        });
-    }   
-    
-    CommonTools.namespace('bizlogic.initPullDownRefresh', exports.initPullDownRefresh);
-    CommonTools.namespace('bizlogic.init', exports.initPullDownRefresh);
+    CommonTools.namespace('bizlogic', PullDownRefresh);
 
 })({}, PullToRefreshTools);

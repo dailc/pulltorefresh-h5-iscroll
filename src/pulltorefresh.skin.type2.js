@@ -14,51 +14,8 @@
 	 */
 	var CLASS_HIDDEN = 'hidden';
 
-	/**
-	 * 默认的设置参数
-	 */
-	var defaultSettingOptions = {
-		//下拉有关
-		down: {
-			//下拉要大于多少长度后再下拉刷新
-			height: 75,
-			contentdown: '下拉可以刷新', //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
-			contentover: '释放立即刷新', //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
-			contentrefresh: '正在刷新', //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
-			contentrefreshsuccess: '刷新成功', //可选，刷新成功的提示
-			contentrefresherror: '刷新失败', //可选，刷新失败的提示-错误回调用到
-			isSuccessTips: true,
-			callback: CommonTools.noop
-		},
-		//上拉有关
-		up: {
-			//是否自动上拉加载-初始化是是否自动
-			auto: false,
-			//距离底部高度(到达该高度即触发)
-			offset: 100,
-			contentdown: '上拉显示更多',
-			contentrefresh: '正在加载...',
-			contentnomore: '没有更多数据了',
-			callback: CommonTools.noop
-		},
-		//IScroll配置相关
-		scroll: {
-			bounceTime: 500, //回弹动画时间
-			//下拉刷新和上拉加载成功动画的时间
-			successAnimationTime: 500
-		},
-		//注意,传给Mui时可以传 #id形式或者是  原生dom对象
-		element: '#pullrefresh'
-	};
-
-	//创建一个Class对象
-	//只需要关注默认的UI实现即可
 	var PullToRefresh = CommonTools.core.extend({
 
-		/*************************************
-		 * 需要实现的实际效果
-		 * 如果不像实现，可以设为null
-		 * *************************/
 		/**
 		 * @description 生成下拉刷新提示，这个需要被具体实现
 		 * 这个默认实现就直接在一个函数里面同时生成下拉和上拉提示了
@@ -83,7 +40,7 @@
 		 * @param {Number} thresholdHeight 对应的高度阈值
 		 */
 		_pullingHook: function(deltaY, thresholdHeight) {
-			//高度阈值
+			// 高度阈值
 			if(deltaY >= thresholdHeight) {
 				this._setCaption(true, this.options.down.contentover);
 			} else if(deltaY < thresholdHeight) {
@@ -106,7 +63,7 @@
 			if(this.options.down.isSuccessTips) {
 				this._setCaption(true, isSuccess ? this.options.down.contentrefreshsuccess : this.options.down.contentrefresherror);
 			} else {
-				//否则直接没有成功提示
+				// 否则直接没有成功提示
 				done();
 			}
 
@@ -133,7 +90,7 @@
 			} else {
 				this._setCaption(false, this.options.up.contentdown);
 			}
-			//this.bottomPocket.classList.remove(CLASS_VISIBILITY);
+			// this.bottomPocket.classList.remove(CLASS_VISIBILITY);
 		},
 		/**
 		 * @description _disablePullUpHook
@@ -148,7 +105,6 @@
 			this.bottomPocket.classList.remove(CLASS_HIDDEN);
 			this._setCaption(false, this.options.up.contentdown);
 		},
-		/*一些是UI对应的实现*/
 		/**
 		 * @description 创建下拉提示
 		 */
@@ -173,7 +129,7 @@
 		 * @description 初始化下拉刷新和上拉加载提示
 		 */
 		_initPocket: function() {
-			//先改变wrap的皮肤
+			// 先改变wrap的皮肤
 			this.wrapper.classList.add('pulltorefresh-type2');
 			var options = this.options;
 			if(options.down && options.down.hasOwnProperty('callback')) {
@@ -189,13 +145,13 @@
 					this.scrollWrap.appendChild(this.bottomPocket);
 				}
 			}
-			//需要滑动到offset位置
-			//这个如果不设置，下拉的提示就会位置不正确
-			//需要设一个定时，否则可能计算失误,这里在返回到offset前就先隐藏了
+			// 需要滑动到offset位置
+			// 这个如果不设置，下拉的提示就会位置不正确
+			// 需要设一个定时，否则可能计算失误,这里在返回到offset前就先隐藏了
 			var self = this;
 			setTimeout(function() {
-				//暂时写死一个，用offset有时会有失误
-				//self.topPocket.offsetHeight||0
+				// 暂时写死一个，用offset有时会有失误
+				// self.topPocket.offsetHeight||0
 				self.topPocket && self._setOffsetY(74, function() {
 					self.topPocket.style.visibility = 'visible';
 					self.bottomPocket && (self.bottomPocket.style.visibility = 'visible');
@@ -242,7 +198,7 @@
 							} else if(title === options.down.contentdown) {
 								pocket.className = 'pull-top-pocket ';
 							} else if(title === options.down.contentrefreshsuccess) {
-								//优先显示tips
+								// 优先显示tips
 								label.innerHTML = self.successTips || title;
 								pocket.className = 'pull-top-pocket success';
 							} else if(title === options.down.contentrefresherror) {
@@ -278,25 +234,14 @@
 
 	/**
 	 * @description 初始化下拉刷新组件
-	 * @param {Object} element
 	 * @param {JSON} options 传入的参数
 	 * @return 返回的是一个下拉刷新对象
 	 */
-	exports.initPullToRefresh = function(element, options) {
-		if(typeof element !== 'string' && !(element instanceof HTMLElement)) {
-			// 如果第一个不是options
-			options = element;
-			element = options['element'];
-		}
-
-		// 合并默认参数,这个得用的默认参数
-		options = CommonTools.extend(true, {}, defaultSettingOptions, options);
-		
-		return new PullToRefresh(element, options);
+	PullToRefresh.init = function(options) {
+		return new PullToRefresh(options);
 	};
-	exports.init = exports.initPullToRefresh;
 
 	
-    CommonTools.namespace('skin.type2', exports);
+    CommonTools.namespace('skin.type2', PullToRefresh);
 
 })({}, PullToRefreshTools);

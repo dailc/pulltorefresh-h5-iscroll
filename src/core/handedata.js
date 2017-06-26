@@ -204,5 +204,5 @@
         exports.dataProcessFn.push(handleDataByPathV7);
     })();
 
-    CommonTools.namespace('bizlogic.dataProcess', exports.dataProcess);
+    CommonTools.namespace('dataProcess', exports.dataProcess);
 })({}, PullToRefreshTools);

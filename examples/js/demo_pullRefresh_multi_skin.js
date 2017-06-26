@@ -10,8 +10,8 @@
 	function initPullRefreshList(pullToRefreshBase, options) {
 		options = options || {};
 		isAuto = options.isAuto||false;
-		var element = options.element;
 		var container = options.container;
+		var listContainer = options.listContainer;
 		// 以下几个是测试加载更多,没有更多数据功能的
 		// 当前页
 		var currpage = 0;
@@ -20,9 +20,9 @@
 		// 总共大小，这里用来判断是否可以上拉加载
 		// 实际业务中，可以不基于totalcount判断的，直接根据接口返回的数据进行判断
 		var totalCount = 21;
-		var pullToRefreshObj = pullToRefreshBase.init({
+		var pullToRefreshObj = new pullToRefreshBase({
 			// 这里用默认设置
-			element: element,
+			container: container,
 			down: {
 				callback: pullDownRefreshCallback,
 				// 是否显示成功动画
@@ -90,7 +90,7 @@
 				fragment.appendChild(li);
 			}
 
-			var dataContainer = document.querySelector(container);
+			var dataContainer = document.querySelector(listContainer);
 			// 添加-下拉刷新时先清除数据
 			if(isPullDown) {
 				dataContainer.innerHTML = '';
@@ -109,7 +109,7 @@
 				}
 			}
 			// 判断当前页的数据是否已经大于totalCount
-			var itemLength = document.querySelector(container).children.length;
+			var itemLength = document.querySelector(listContainer).children.length;
 			if(itemLength >= totalCount) {
 				pullToRefreshObj.endPullUpToRefresh(true);
 			} else {
@@ -119,7 +119,7 @@
 
 		function refresh() {
 			// 清空dom
-			document.querySelector(container).innerHTML = '';
+			document.querySelector(listContainer).innerHTML = '';
 			currpage = -1; //这个必须要变
 			// 手动将状态设为可以加载更多
 			if(pullToRefreshObj.finished) {
@@ -138,13 +138,13 @@
 	exports.init = function(pullToRefreshObj) {
 		initPullRefreshList(pullToRefreshObj, {
 			isAuto:true,
-			element:'#pullrefresh1',
-			container:'#listdata1'
+			container:'#pullrefresh1',
+			listContainer:'#listdata1'
 		});
 		initPullRefreshList(pullToRefreshObj, {
 			isAuto:false,
-			element:'#pullrefresh2',
-			container:'#listdata2'
+			container:'#pullrefresh2',
+			listContainer:'#listdata2'
 		});
 	};
 	

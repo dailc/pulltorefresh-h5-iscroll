@@ -94,7 +94,7 @@
          */
         function initPullRefreshList(pullToRefreshBase) {
             // 两个下拉刷新对象
-            var pullToRefresh1 = PullToRefreshTools.bizlogic.init({
+            var pullToRefresh1 = new PullToRefreshTools.bizlogic({
                 skin: pullToRefreshBase,
                 setting: {
                     scroll: {
@@ -102,16 +102,16 @@
                         eventPassthrough: 'horizontal'
                     },
                 },
-                method: 'GET',
+                type: 'GET',
                 url: '../../json/testList.json',
                 template: '#list_item',
-                listSelector: '#listdata1',
-                pullrefreshSelector: '#pullrefresh1',
+                container: '#pullrefresh1',
+                listContainer: '#listdata1',             
                 itemClick: function(e) {
                     console.log("1点击:" + this.id);
                 }
             });
-            var pullToRefresh2 = PullToRefreshTools.bizlogic.init({
+            var pullToRefresh2 = new PullToRefreshTools.bizlogic({
                 skin: pullToRefreshBase,
                 setting: {
                     scroll: {
@@ -119,11 +119,11 @@
                         eventPassthrough: 'horizontal'
                     },
                 },
-                method: 'GET',
+                type: 'GET',
                 url: '../../json/testList.json',
                 template: '#list_item',
-                listSelector: '#listdata2',
-                pullrefreshSelector: '#pullrefresh2',
+                container: '#pullrefresh2',
+                listContainer: '#listdata2',
                 itemClick: function(e) {
                     console.log("1点击:" + this.id);
                 }

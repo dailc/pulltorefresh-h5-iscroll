@@ -2251,6 +2251,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          * @returns {unresolved}
          */
         exports.extend = function() { //from jquery2
+            // from jquery2
             var options, name, src, copy, copyIsArray, clone,
                 target = arguments[0] || {},
                 i = 1,
@@ -2353,7 +2354,17 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
             }
             return this;
         };
+        /**
+         * @description 选择这段代码用到的太多了，因此抽取封装出来
+         * @param {Object} element dom元素或者selector
+         */
+        exports.selector = function(element) {
+            if (typeof element === 'string') {
+                element = document.querySelector(element);
+            }
 
+            return element;
+        };
         var class2type = {};
         exports.each(['Boolean', 'Number', 'String', 'Function', 'Array', 'Date', 'RegExp', 'Object', 'Error'], function(i, name) {
             class2type["[object " + name + "]"] = name.toLowerCase();
@@ -2585,62 +2596,69 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
     /**
      * 默认的设置参数
      */
-    var defaultSettingOptions = {
-        //下拉有关
+    var defaultSetting = {
+        // 下拉有关
         down: {
-            //下拉要大于多少长度后再下拉刷新
+            // 下拉要大于多少长度后再下拉刷新
             height: 75,
+            // 可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+            contentdown: '下拉可以刷新', 
+            // 可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+            contentover: '释放立即刷新', 
+            // 可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+            contentrefresh: '正在刷新', 
+            // 可选，刷新成功的提示
+            contentrefreshsuccess: '刷新成功', 
+            // 可选，刷新失败的提示-错误回调用到
+            contentrefresherror: '刷新失败', 
+            isSuccessTips: true,
             callback: CommonTools.noop
         },
-        //上拉有关
+        // 上拉有关
         up: {
-            //距离底部高度(到达该高度即触发)
+            // 是否自动上拉加载-初始化是是否自动
+            auto: true,
+            // 距离底部高度(到达该高度即触发)
             offset: 100,
-            //配置了这个属性，只要停下来时到达了底部也会触发刷新
+            // 配置了这个属性，只要停下来时到达了底部也会触发刷新
             isFastLoading: false,
+            contentdown: '上拉显示更多',
+            contentrefresh: '正在加载...',
+            contentnomore: '没有更多数据了',
             callback: CommonTools.noop
 
         },
-        //IScroll配置相关
+        // IScroll配置相关
         scroll: {
-            bounceTime: 500, //回弹动画时间
-            //下拉刷新和上拉加载成功动画的时间
+            // 回弹动画时间
+            bounceTime: 500, 
+            // 下拉刷新和上拉加载成功动画的时间
             successAnimationTime: 500,
-            //是否允许嵌套，设为true代表外层仍然有一个横向嵌套
+            // 是否允许嵌套，设为true代表外层仍然有一个横向嵌套
             eventPassthrough: false
         },
-        //注意,传给Mui时可以传 #id形式或者是  原生dom对象
-        element: '#pullrefresh'
+        // 注意,传给Mui时可以传 #id形式或者是  原生dom对象
+        container: '#pullrefresh'
     };
 
     //创建一个Class对象
     var PullToRefresh = CommonTools.Clazz.extend({
         /**
          * @description Class构造时会自动执行对象的init函数
-         * @param {HTMLElement||String} element 下拉刷新对象,对应scroll的dom结构对象
-         * @param {JSON} options 传入参数
+         * @param {JSON} options 传入参数,包括
+         * container 下拉刷新对象,对应scroll的dom结构对象
          */
-        init: function(element, options) {
-            if(typeof element !== 'object' || element instanceof HTMLElement) {
-                //如果第一个不是options
-                this.element = element;
-            } else {
-                options = element;
-                this.element = options['element'];
-            }
-            //如果没有则用默认参数
-            this.element = this.element || defaultSettingOptions['element'];
-            if(typeof this.element === 'string') {
-                this.element = document.querySelector(this.element);
-            }
-            //合并默认参数
-            this.options = CommonTools.extend(true, {}, defaultSettingOptions, options);
-            //dom对象
-            this.wrapper = this.element;
-            //scroll的dom-wrapper下的第一个节点
-            this.scrollWrap = this.element.children[0];
-            //生成一个IScroll对象 
-            this.scroller = new IScroll(this.element, {
+        init: function(options) {
+            options = CommonTools.extend(true, {}, defaultSetting, options);
+            
+            this.container = CommonTools.selector(options.container);
+            this.options = options;       
+            // wrapper兼容以前的内部调用法
+            this.wrapper = this.container;
+            // scroll的dom-wrapper下的第一个节点
+            this.scrollWrap = this.container.children[0];
+            // 生成一个IScroll对象 ，默认不启用tap(会和其它tap库冲突)
+            this.scroller = new IScroll(this.container, {
                 probeType: 2,
                 tap: false,
                 mouseWheel: true,
@@ -2648,15 +2666,15 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
             });
 
             this._initParams();
+            // 对应的hook函数
             this._initPullToRefreshTipsHook && this._initPullToRefreshTipsHook(this.enablePullDown, this.enablePullUp);
-
             this._initEvent();
 
             if(options.down && options.down.auto) { 
-                //如果设置了auto，则自动下拉一次
+                // 如果设置了auto，则自动下拉一次
                 this.pulldownLoading();
             } else if(options.up && options.up.auto) { 
-                //如果设置了auto，则自动上拉一次
+                // 如果设置了auto，则自动上拉一次
                 this.pullupLoading();
             }
         },
@@ -2664,11 +2682,11 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          * @description 初始化参数
          */
         _initParams: function() {
-            //是否支持下拉刷新-只有在顶部才代表可以允许下拉刷新
+            // 是否支持下拉刷新-只有在顶部才代表可以允许下拉刷新
             this.enablePullDown = this.options.down ? true : false;
             this.enablePullUp = this.options.up ? true : false;
             this.finished = false;
-            //实际的下拉刷新距离y轴的距离(这个一般会被下拉刷新动画页面占据)
+            // 实际的下拉刷新距离y轴的距离(这个一般会被下拉刷新动画页面占据)
             this.offsetY = this.offsetY || 0;
             this.topHeiht = (this.options.down && this.options.down.height) ? this.options.down.height : 0;
 
@@ -2678,60 +2696,68 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          * @description 初始化事件
          */
         _initEvent: function() {
-            //可以获取的:
-            //myScroll.x/y, current position
-            //myScroll.directionX/Y, last direction (-1 down/right, 0 still, 1 up/left)
-            //myScroll.currentPage, current snap point info
+            /**
+             * 可以获取的:
+             * myScroll.x/y, current position
+             * myScroll.directionX/Y, last direction (-1 down/right, 0 still, 1 up/left)
+             * myScroll.currentPage, current snap point info
+             */
             var self = this;
+            
             this.scroller.on('scrollStart', function() {
                 self._handleScrollStart(this);
             });
+            
             this.scroller.on('scroll', function() {
                 self._handleScroll(this);
             });
-            //本来是用scrollEnd，但是发现prototype为3时性能很低，所以用了为2的状态
-            //而这个状态scrollend没什么用，所以自定义了一个touchEnd事件
+            
+            // 本来是用scrollEnd，但是发现prototype为3时性能很低，所以用了为2的状态
+            // 而这个状态scrollend没什么用，所以自定义了一个touchEnd事件
             this.scroller.on('touchEnd', function() {
                 self._handleTouchEnd(this);
             });
-            //scrollEnd的新作用就是用来修正可能的滑动
-            var self = this;
+            
+            // scrollEnd的新作用就是用来修正可能的滑动
             this.scroller.on('scrollEnd', function() {
                 self._handleScrollEnd(this);
             });
-            //监听refresh事件，进行修正
-            //IScroll的this.hasVerticalScroll这个值当元素没有填充满时是会为false的
-            //而下拉刷新中是肯定为true的，所以我们需要修正
-            //其中maxScrollY当内容小于wrapper时是0，而这时候如果用了offsetY，我们需要重新修正
+            
+            /**
+             * 监听refresh事件，进行修正
+             * IScroll的this.hasVerticalScroll这个值当元素没有填充满时是会为false的
+             * 而下拉刷新中是肯定为true的，所以我们需要修正
+             * 其中maxScrollY当内容小于wrapper时是0，而这时候如果用了offsetY，我们需要重新修正
+             */
             this.scroller.on('refresh', function() {
                 self.scroller.hasVerticalScroll = true;
                 if(self.scroller.maxScrollY == 0) {
                     self.scroller.maxScrollY = -self.offsetY;
                 }
             });
-            //刷新
+            
+            // 刷新
             this.refresh();
-
         },
 
         /**
          * @description 处理事件 scrollStart
          */
         _handleScrollStart: function(that) {
-            //重置一些状态
-            //是否允许下拉刷新
+            // 重置一些状态
+            // 是否允许下拉刷新
             this.allowPullDownLoading = false;
-            //开始的Y坐标
+            // 开始的Y坐标
             this.startY = that.y;
-            //X
+            // X
             this.startX = that.x;
-            //记录lastY来判断方向
+            // 记录lastY来判断方向
             this.lastY = that.y;
             var nowtime = (new Date()).getTime();
-            //记录滑动开始的时间
+            // 记录滑动开始的时间
             this.startTime = nowtime;
 
-            //默认不是下拉刷新
+            // 默认不是下拉刷新
             this.pulldown = false;
 
         },
@@ -2739,67 +2765,67 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          * @description 处理事件 Scroll
          */
         _handleScroll: function(that) {
-            //如果是快速滑动
+            // 如果是快速滑动
             if(this._isFastScroll()) {
                 return;
             }
 
-            //计算滑动偏移量
-            //左右移动的距离
+            // 计算滑动偏移量
+            // 左右移动的距离
             var deltaX = Math.abs(that.x - this.startX);
-            //上下偏移量
+            // 上下偏移量
             var deltaY = Math.abs(that.y - this.startY);
             var originalDeltaY = that.y + this.offsetY;
             this.lastY = that.y;
             if(Math.abs(that.distX) > Math.abs(that.distY)) {
-                //不满足条件时要暂时禁止滑动，因为可能外面还包裹着横向滑动条，要为他服务
-                //this.scroller.disable();
+                // 不满足条件时要暂时禁止滑动，因为可能外面还包裹着横向滑动条，要为他服务
+                // this.scroller.disable();
                 return;
             }
-            //偏移量要满足条件才行
+            // 偏移量要满足条件才行
             if(!(deltaY > 5 && deltaY > deltaX) || this.loading || this.allowPullDownSuccessLoading) {
 
                 return;
             }
-            //高度阈值
+            // 高度阈值
             var thresholdHeight = (this.options.down && this.options.down.height) ? this.options.down.height : 0;
-            //TODO: 需要处理一下，如果下拉完成了，要触发刷新动画
-            //如果允许下拉刷新
+            // 如果允许下拉刷新
             if(this.enablePullDown) {
 
                 if(!this.pulldown && !this.loading && that.directionY == -1 && that.y + this.offsetY >= 0) {
-                    //如果没有初始化下拉刷新，并且是下拉，进行初始化
+                    // 如果没有初始化下拉刷新，并且是下拉，进行初始化
                     this.pulldown = true;
-
                 }
+                
                 if(that.y + this.offsetY >= thresholdHeight && that.directionY == -1) {
-                    //-1代表方向向下，所以松开的时候是不会触发的
-                    //做一些下拉刷新的操作
+                    // -1代表方向向下，所以松开的时候是不会触发的
+                    // 做一些下拉刷新的操作
                     if(!this.loading) {
-                        //如果没有在loading,才允许重置状态，否则可能是loading导致了高度符合条件
+                        // 如果没有在loading,才允许重置状态，否则可能是loading导致了高度符合条件
                         this.allowPullDownLoading = true;
                     }
 
                 } else if(that.y + this.offsetY < thresholdHeight && that.y + this.offsetY >= 0) {
-                    //注意:只有手动下拉时才会触发
-                    //如果没到达到指定下拉距离的时候
+                    // 注意:只有手动下拉时才会触发
+                    // 如果没到达到指定下拉距离的时候
                     if(that.directionY === 1) {
-                        //如果用户取消上拉加载（实际操作：先拉上去然后手指不松开又拉下来）
+                        // 如果用户取消上拉加载（实际操作：先拉上去然后手指不松开又拉下来）
                         this.allowPullDownLoading = false;
                     }
                 }
-                //对应可能需要进行pull动画
+                
+                // 对应可能需要进行pull动画
                 this.pulldown && this._pullingHook && this._pullingHook(originalDeltaY, thresholdHeight);
             }
 
-            //如果允许上拉加载
+            // 如果允许上拉加载
             if(this.enablePullUp && this.options.up) {
-                //这里要求y的绝对值要大于   阈值和maxY
-                //因为它们都为负，所以就变为小于了
-                //允许上拉加载的情况 
+                // 这里要求y的绝对值要大于   阈值和maxY
+                // 因为它们都为负，所以就变为小于了
+                // 允许上拉加载的情况 
                 if((that.y - this.offsetY - this.options.up.offset) <= (this.scroller.maxScrollY - thresholdHeight) && that.directionY == 1) {
 
-                    //方向向上，并且达到了触发位置，默认为到底部了
+                    // 方向向上，并且达到了触发位置，默认为到底部了
                     this._scrollbottom();
                 }
             }
@@ -2808,14 +2834,14 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
         /**
          * @description 设置偏移
          * @param {Number} offsetY 顶部提示的间距(如果是absolute布局，传0)
-         * 
          */
         _setOffsetY: function(offsetY, done) {
             var self = this;
+            
             self.offsetY = offsetY || 0;
-            //设置IScroll里新增的offset
+            // 设置IScroll里新增的offset
             self.scroller.minScrollY = -offsetY;
-            //设置了offsetY后需要移动到相应地方
+            // 设置了offsetY后需要移动到相应地方
             self.scroller.scrollTo(0, -self.offsetY);
             done && done();
         },
@@ -2824,7 +2850,8 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          */
         _handleTouchEnd: function(that) {
             var self = this;
-            //下拉刷新动画以及触发回调
+            
+            // 下拉刷新动画以及触发回调
             if(self.allowPullDownLoading) {
                 self.pulldownLoading(undefined, self.options.scroll.bounceTime);
             } else {
@@ -2838,13 +2865,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
         _handleScrollEnd: function(that) {
             var self = this;
             var thresholdHeight = (self.options.down && self.options.down.height) ? self.options.down.height : 0;
-            //如果y可以看到下拉tips
-            //只要不满足下拉刷新的，就回滚,目前回滚直接通过修改IScroll进行
-            //			if(that.y > -self.offsetY && ((that.y < Math.abs(thresholdHeight - self.offsetY)))) {
-            //				//普通的回滚，需要重新回滚
-            //				self.scroller.scrollTo(0, -self.offsetY, self.options.scroll.bounceTime);
-            //				
-            //			}
+
             self._scrollEndHook && self._scrollEndHook();
             if(self.enablePullUp && self.options.up) {
                 if(!self.loading && self.options.up.isFastLoading) {
@@ -2863,7 +2884,8 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
             var isFast = false;
             var nowtime = (new Date()).getTime();
             var dsTime = nowtime - this.startTime;
-            //如果拉动的时间小于200ms 则判断为快速刷新
+            
+            // 如果拉动的时间小于200ms 则判断为快速刷新
             if(dsTime > 100) {
                 isFast = false;
             } else {
@@ -2883,7 +2905,6 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
                 this.pulldown = false;
                 this.pullupLoading();
             }
-
         },
 
         /**
@@ -2892,36 +2913,32 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          */
         _endPulldownToRefresh: function(isSuccess) {
             var self = this;
+            
             if(!this.options.down) {
                 return;
             }
             if(self.loading) {
-                //状态需要重置
+                // 状态需要重置
                 self.allowPullDownLoading = false;
-                //控制scroller的高度  self.options.scroll.bounceTime 
+                // 控制scroller的高度  self.options.scroll.bounceTime 
                 self.loading = false;
-                //
-                //接下来会默认触发一个成功回调的动画
+                // 接下来会默认触发一个成功回调的动画
                 self.allowPullDownSuccessLoading = true;
+                
                 var timer;
-                //success里done 或者过一段时间都是动画可以结束的标识
+                
+                // success里done 或者过一段时间都是动画可以结束的标识
                 self._pulldownLoaingAnimationSuccessHook && self._pulldownLoaingAnimationSuccessHook(function() {
                     timer && clearTimeout(timer);
                     self.allowPullDownSuccessLoading = false;
-
                     self._checkPullDownLoadingEnd();
                 }, isSuccess);
+                
                 timer = setTimeout(function() {
                     timer && clearTimeout(timer);
                     self.allowPullDownSuccessLoading = false;
                     self._checkPullDownLoadingEnd();
-                }, self.options.scroll.successAnimationTime);
-                //由于success函数中有可能会使用animation动画，而IScroll中监听到_transitionEnd则会重置，因此需要再次主动定位
-                //需要设置一个延时，因为IScroll有一个默认的回滚，这个要在它之后
-                //				setTimeout(function() {
-                //					self.scroller.scrollTo(0, self.options.down.height - this.offsetY, 0);
-                //				}, 0);
-
+                }, self.options.scroll.successAnimationTime);       
             }
         },
         /**
@@ -2929,60 +2946,62 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
          */
         _checkPullDownLoadingEnd: function() {
             var self = this;
+            
             if(self.allowPullDownSuccessLoading) {
-                //必须结束了success后才行
+                // 必须结束了success后才行
                 return;
             }
             self._pulldownLoaingAnimationEndHook && self._pulldownLoaingAnimationEndHook();
             self.scroller.scrollTo(0, -self.offsetY, self.options.scroll.bounceTime);
 
             setTimeout(function() {
-                //恢复回滚
+                // 恢复回滚,结束完动画后要刷新容器
                 self.scroller.minScrollY = -self.offsetY;
                 self.scroller.refresh();
             }, self.options.scroll.bounceTime);
-            //结束完动画后要刷新容器
 
         },
         /**
          * @description 结束上拉加载更多
-         * @param {Object} finished
+         * @param {Boolean} finished
          */
         _endPullupToRefresh: function(finished) {
             var self = this;
 
             if(!self.pulldown) {
                 self.loading = false;
-                //刷新容器
+                // 刷新容器
                 self.scroller.refresh();
                 if(finished) {
                     self.finished = true;
                 }
-                //执行的是成功动画，成功动画里面自然会去end正常动画
+                // 执行的是成功动画，成功动画里面自然会去end正常动画
                 self._pullupLoaingAnimationSuccessHook && self._pullupLoaingAnimationSuccessHook(finished);
 
             }
         },
 
-        /*************************************API**************************/
 
         /**
          * @description 下拉刷新中,注意是通过持续的 scrollto 将这个定位到对应位置
-         * @param {Object} y
-         * @param {Object} time
+         * @param {Number} y
+         * @param {Number} time
          */
         pulldownLoading: function(y, time) {
             var self = this;
+            
             if(!this.options.down) {
                 return;
             }
             if(self.loading) {
                 return;
             }
-
-            typeof y === 'undefined' && (y = this.options.down.height - this.offsetY); //默认高度
-            //需要设置一个延时，因为IScroll有一个默认的回滚，这个要在它之后
-            //暂时禁止它的回滚 这里的高度要计算好
+            
+            //默认高度
+            typeof y === 'undefined' && (y = this.options.down.height - this.offsetY); 
+            
+            // 需要设置一个延时，因为IScroll有一个默认的回滚，这个要在它之后
+            // 暂时禁止它的回滚 这里的高度要计算好
             self.scroller.minScrollY = self.topHeiht - self.offsetY;
             setTimeout(function() {
                 self.scroller.scrollTo(0, y, time || 0);
@@ -2991,7 +3010,6 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
                 var callback = self.options.down.callback;
                 callback && callback.call(self);
             }, 0);
-
         },
 
         /**
@@ -3003,7 +3021,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
         pullupLoading: function(callback, x, time) {
             if(this.enablePullUp && this.options.up) {
                 if(this.finished) {
-                    //如果已经结束,刷新
+                    // 如果已经结束,刷新
                     this.refresh(true);
                 }
                 x = x || 0;
@@ -3013,7 +3031,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
                 }
                 this.scroller.scrollTo(x, this.scroller.maxScrollY, time);
                 this.pulldown = false;
-                //上拉动画
+                // 上拉动画
                 this._pullupLoaingAnimationHook && this._pullupLoaingAnimationHook(false);
 
                 this.loading = true;
@@ -3058,15 +3076,14 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
         resetLoadingState: function(isPullDown, isNoMoreData, isSuccess) {
             var that = this;
             if(isPullDown) {
-                //如果是恢复下拉刷新状态--这个状态只有下拉刷新时才恢复
+                // 如果是恢复下拉刷新状态--这个状态只有下拉刷新时才恢复
                 this._endPulldownToRefresh(isSuccess);
             }
-            //接下拉不管是下拉刷新,还是上拉加载,都得刷新上拉加载的状态
+            // 接下拉不管是下拉刷新,还是上拉加载,都得刷新上拉加载的状态
             if(isNoMoreData) {
-                //如果没有更多数据了-注意两个变量的差异
+                // 如果没有更多数据了-注意两个变量的差异
                 this._endPullupToRefresh(true);
             } else {
-
                 this._endPullupToRefresh(false);
             }
         },
@@ -3099,14 +3116,8 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
             this.successTips = tips;
         },
     });
-
-    /**
-     * 对外暴露的只是这个对象
-     */
-    exports.PullToRefresh = PullToRefresh;
-
     
-    CommonTools.namespace('core', exports.PullToRefresh);
+    CommonTools.namespace('core', PullToRefresh);
 })({}, PullToRefreshTools);
 /**
  * 作者: dailc
@@ -3124,51 +3135,8 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 	 */
 	var CLASS_HIDDEN = 'hidden';
 
-	/**
-	 * 默认的设置参数
-	 */
-	var defaultSettingOptions = {
-		//下拉有关
-		down: {
-			//下拉要大于多少长度后再下拉刷新
-			height: 75,
-			contentdown: '下拉可以刷新', //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
-			contentover: '释放立即刷新', //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
-			contentrefresh: '正在刷新', //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
-			contentrefreshsuccess: '刷新成功', //可选，刷新成功的提示
-			contentrefresherror: '刷新失败', //可选，刷新失败的提示-错误回调用到
-			isSuccessTips: true,
-			callback: CommonTools.noop
-		},
-		//上拉有关
-		up: {
-			//是否自动上拉加载-初始化是是否自动
-			auto: false,
-			//距离底部高度(到达该高度即触发)
-			offset: 100,
-			contentdown: '上拉显示更多',
-			contentrefresh: '正在加载...',
-			contentnomore: '没有更多数据了',
-			callback: CommonTools.noop
-		},
-		//IScroll配置相关
-		scroll: {
-			bounceTime: 500, //回弹动画时间
-			//下拉刷新和上拉加载成功动画的时间
-			successAnimationTime: 500
-		},
-		//注意,传给Mui时可以传 #id形式或者是  原生dom对象
-		element: '#pullrefresh'
-	};
-
-	//创建一个Class对象
-	//只需要关注默认的UI实现即可
 	var PullToRefresh = CommonTools.core.extend({
 
-		/*************************************
-		 * 需要实现的实际效果
-		 * 如果不像实现，可以设为null
-		 * *************************/
 		/**
 		 * @description 生成下拉刷新提示，这个需要被具体实现
 		 * 这个默认实现就直接在一个函数里面同时生成下拉和上拉提示了
@@ -3193,7 +3161,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 		 * @param {Number} thresholdHeight 对应的高度阈值
 		 */
 		_pullingHook: function(deltaY, thresholdHeight) {
-			//高度阈值
+			// 高度阈值
 			if(deltaY >= thresholdHeight) {
 				this._setCaption(true, this.options.down.contentover);
 			} else if(deltaY < thresholdHeight) {
@@ -3216,7 +3184,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 			if(this.options.down.isSuccessTips) {
 				this._setCaption(true, isSuccess ? this.options.down.contentrefreshsuccess : this.options.down.contentrefresherror);
 			} else {
-				//否则直接没有成功提示
+				// 否则直接没有成功提示
 				done();
 			}
 
@@ -3243,7 +3211,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 			} else {
 				this._setCaption(false, this.options.up.contentdown);
 			}
-			//this.bottomPocket.classList.remove(CLASS_VISIBILITY);
+			// this.bottomPocket.classList.remove(CLASS_VISIBILITY);
 		},
 		/**
 		 * @description _disablePullUpHook
@@ -3258,7 +3226,6 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 			this.bottomPocket.classList.remove(CLASS_HIDDEN);
 			this._setCaption(false, this.options.up.contentdown);
 		},
-		/*一些是UI对应的实现*/
 		/**
 		 * @description 创建下拉提示
 		 */
@@ -3283,7 +3250,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 		 * @description 初始化下拉刷新和上拉加载提示
 		 */
 		_initPocket: function() {
-			//先改变wrap的皮肤
+			// 先改变wrap的皮肤
 			this.wrapper.classList.add('pulltorefresh-type2');
 			var options = this.options;
 			if(options.down && options.down.hasOwnProperty('callback')) {
@@ -3299,13 +3266,13 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 					this.scrollWrap.appendChild(this.bottomPocket);
 				}
 			}
-			//需要滑动到offset位置
-			//这个如果不设置，下拉的提示就会位置不正确
-			//需要设一个定时，否则可能计算失误,这里在返回到offset前就先隐藏了
+			// 需要滑动到offset位置
+			// 这个如果不设置，下拉的提示就会位置不正确
+			// 需要设一个定时，否则可能计算失误,这里在返回到offset前就先隐藏了
 			var self = this;
 			setTimeout(function() {
-				//暂时写死一个，用offset有时会有失误
-				//self.topPocket.offsetHeight||0
+				// 暂时写死一个，用offset有时会有失误
+				// self.topPocket.offsetHeight||0
 				self.topPocket && self._setOffsetY(74, function() {
 					self.topPocket.style.visibility = 'visible';
 					self.bottomPocket && (self.bottomPocket.style.visibility = 'visible');
@@ -3352,7 +3319,7 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 							} else if(title === options.down.contentdown) {
 								pocket.className = 'pull-top-pocket ';
 							} else if(title === options.down.contentrefreshsuccess) {
-								//优先显示tips
+								// 优先显示tips
 								label.innerHTML = self.successTips || title;
 								pocket.className = 'pull-top-pocket success';
 							} else if(title === options.down.contentrefresherror) {
@@ -3388,25 +3355,14 @@ var PullToRefreshTools = window.PullToRefreshTools || (function(exports, undefin
 
 	/**
 	 * @description 初始化下拉刷新组件
-	 * @param {Object} element
 	 * @param {JSON} options 传入的参数
 	 * @return 返回的是一个下拉刷新对象
 	 */
-	exports.initPullToRefresh = function(element, options) {
-		if(typeof element !== 'string' && !(element instanceof HTMLElement)) {
-			// 如果第一个不是options
-			options = element;
-			element = options['element'];
-		}
-
-		// 合并默认参数,这个得用的默认参数
-		options = CommonTools.extend(true, {}, defaultSettingOptions, options);
-		
-		return new PullToRefresh(element, options);
+	PullToRefresh.init = function(options) {
+		return new PullToRefresh(options);
 	};
-	exports.init = exports.initPullToRefresh;
 
 	
-    CommonTools.namespace('skin.type2', exports);
+    CommonTools.namespace('skin.type2', PullToRefresh);
 
 })({}, PullToRefreshTools);

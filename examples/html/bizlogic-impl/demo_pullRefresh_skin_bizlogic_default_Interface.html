@@ -51,7 +51,7 @@
     <script>
         
         window.onload = function() {
-             PullToRefreshTools.bizlogic.init({
+             new PullToRefreshTools.bizlogic({
                 url: 'http://115.29.151.25:8012/request.php?action=testListDemoV7',
                 dataRequest: function(currPage, callback) {
                     return  {
