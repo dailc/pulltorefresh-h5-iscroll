@@ -18,9 +18,9 @@
 		//总共大小，这里用来判断是否可以上拉加载
 		//实际业务中，可以不基于totalcount判断的，直接根据接口返回的数据进行判断
 		var totalCount = 21;
-		var pullToRefreshObj = pullToRefreshBase.init({
+		var pullToRefreshObj = new pullToRefreshBase({
 			//这里用默认设置
-			element: '#pullrefresh',
+			container: '#pullrefresh',
 			down: disablePullDown?null:{
 				callback: pullDownRefreshCallback,
 				//是否显示成功动画

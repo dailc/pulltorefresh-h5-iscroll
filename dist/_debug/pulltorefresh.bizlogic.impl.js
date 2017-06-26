@@ -232,25 +232,13 @@
         setting: {
             // 下拉有关
             down: {
-                height: 75,
-                contentdown: '下拉可以刷新', // 可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
-                contentover: '释放立即刷新', // 可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
-                contentrefresh: '正在刷新', // 可选，正在刷新状态时，下拉刷新控件上显示的标题内容
-                contentrefreshsuccess: '刷新成功', // 可选，刷新成功的提示
-                contentrefresherror: '刷新失败', // 可选，刷新失败的提示-错误回调用到
+                // 可以自定义自己的设置
                 isSuccessTips: true,
             },
             // 上拉有关
             up: {
-                // 是否自动上拉加载-初始化是是否自动
+                // 可以自定义自己的设置
                 auto: true,
-                // 距离底部高度(到达该高度即触发)
-                offset: 100,
-                // 是否隐藏那个加载更多动画,达到默认加载效果
-                show: true,
-                contentdown: '上拉显示更多',
-                contentrefresh: '正在加载...',
-                contentnomore: '没有更多数据了',
             }
         },
         type: 'POST',

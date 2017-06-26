@@ -69,11 +69,11 @@
 
 调用示例:
 ```
-PullToRefreshTools.bizlogic.init({
+new PullToRefreshTools.bizlogic({
     skin: PullToRefreshTools.skin.defaults,
     url: 'http://115.29.151.25:8012/request.php',
     template: '#list_item',
-    requestData: function(currPage, callback) {
+    dataRequest: function(currPage, callback) {
         var result = {
             action: 'testPullrefreshListDemoV3',
             paras: {

@@ -47,27 +47,27 @@
 * JS Initialization(JS初始化)
 	
 	```
-	var pullToRefreshObj = PullToRefreshTools.skin.default.init({
-	    //这里用默认设置
-	    element: '#pullrefresh',
-	    //down为null表示不要下拉刷新    
+	var pullToRefreshObj = new PullToRefreshTools.skin.default({
+	    // 这里用默认设置
+	    container: '#pullrefresh',
+	    // down为null表示不要下拉刷新    
 	    down: {
 	        callback: pullDownRefreshCallback,
-	        //是否显示成功动画
+	        // 是否显示成功动画
 	        isSuccessTips: true,
 	    },
-	    //up为null为不要上拉
-	    //上拉有关
+	    // up为null为不要上拉
+	    // 上拉有关
 	    up: {
-	        //是否自动上拉加载-初始化是是否自动
+	        // 是否自动上拉加载-初始化是是否自动
 	        auto: true,
 	
 	        callback: pullUpRefreshCallback
 	    },
 	    scroll: {
 	        bounceTime: 500,
-	        //回弹动画时间
-	        //下拉刷新和上拉加载成功动画的时间
+	        // 回弹动画时间
+	        // 下拉刷新和上拉加载成功动画的时间
 	        successAnimationTime: 500
 	    },
 	});
@@ -149,5 +149,7 @@
     * IScroll打包到内部
 * 20170621
     * 更新`native`皮肤引入时的bug-由于重复打包core，导致命名冲突
+* 20170626
+    * 下拉刷新内部优化，调用方式默认变为`new`的使用方式
 
 ## License (MIT)
