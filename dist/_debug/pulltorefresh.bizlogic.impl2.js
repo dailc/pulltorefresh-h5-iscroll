@@ -26,9 +26,6 @@
          */
         exports.dataProcess = function(response, options) {
             options = options || {};
-            if (typeof options.dataPath === 'string') {
-                options.dataPath = [options.dataPath];
-            }
 
             // 永远不要试图修改arguments，请单独备份，否则在严格模式和非严格模式下容易出现错误
             var args = [].slice.call(arguments);
@@ -46,6 +43,17 @@
                     type: '未知数据格式'
                 }
             };
+
+            if (options.dataPath == null) {
+                // 不需要处理
+
+                return response;
+            }
+
+            if (typeof options.dataPath === 'string') {
+                options.dataPath = [options.dataPath];
+            }
+
             // 默认为详情
             var isDebug = options.isDebug || false,
                 paths = options.dataPath,
@@ -119,13 +127,13 @@
 
             if (returnInfo.Code == '1') {
                 if (businessInfo.Code == '1') {
+                    returnValue.code = 1;
+
                     var data = CommonTools.getNameSpaceObj(response, path);
 
                     if (data) {
-                        returnValue.code = 1;
                         returnValue.data = data;
                     } else {
-                        returnValue.code = 0;
                         returnValue.message = returnValue.message || '指定路径下没有找到数据';
                         returnValue.data = null;
                         // 3代表业务数据错误
@@ -177,13 +185,14 @@
             returnValue.message = status.text;
 
             if (status.code == '200') {
+                returnValue.code = 1;
+
                 var data = CommonTools.getNameSpaceObj(response, path);
 
                 if (data) {
-                    returnValue.code = 1;
+
                     returnValue.data = data;
                 } else {
-                    returnValue.code = 0;
                     returnValue.message = returnValue.message || '指定路径下没有找到数据';
                     returnValue.data = null;
                     // 3代表业务数据错误

@@ -28,20 +28,15 @@
             </div>
         </div>          
         
-        <!-- 列表每一个item需要用到的模板 -->
-        <script type="text/template" id="item-template">
-           <li class="mui-table-view-cell" id="{{InfoID}}">
-             <p class="cell-title">
-                {{Title}}
-             </p>
-             <p class="cell-content">
-                <span class="cell-content-subcontent">
+        <script type="text/x-tpl" id="item-template">
+            <li class="mui-table-view-cell" id="{{guid}}">
+                <h3 class="msg-title">
+                    {{title}}
+                </h3>
+                <span class="msg-fs14 msg-date">
+                    {{date}}
                 </span>
-                <span class="cell-content-time">
-                    {{InfoDate}}
-                </span>
-             </p>
-         </li>
+            </li>
         </script>
     </body>
     <script type="text/javascript" src="../../js/mui.js" ></script>

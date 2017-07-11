@@ -27,19 +27,14 @@
             </div>
         </div>
 
-        <!-- 列表每一个item需要用到的模板 -->
-        <script type="text/template" id="item-template">
-            <li class="mui-table-view-cell" id="{{InfoID}}">
-                <p class="cell-title">
-                    {{Title}}
-                </p>
-                <p class="cell-content">
-                    <span class="cell-content-subcontent">
+        <script type="text/x-tpl" id="item-template">
+            <li class="mui-table-view-cell" id="{{guid}}">
+                <h3 class="msg-title">
+                    {{title}}
+                </h3>
+                <span class="msg-fs14 msg-date">
+                    {{date}}
                 </span>
-                    <span class="cell-content-time">
-                    {{InfoDate}}
-                </span>
-                </p>
             </li>
         </script>
     </body>
@@ -51,7 +46,7 @@
         window.onload = function() {
             new PullToRefreshTools.bizlogic({
                 skin: PullToRefreshTools.skin.defaults,
-                url: 'http://115.29.151.25:8012/request.php?action=testListDemoV7',
+                url: 'http://115.29.151.25:8012/request.php?action=testV7List',
                 template: '#item-template',
                 dataRequest: function(currPage, callback) {
                     return  {
@@ -66,8 +61,8 @@
                 dataChange: function(response) {
                     var outData = null;
                     
-                    if (response && response.custom && response.custom.list) {
-                        outData = response.custom.list;
+                    if (response && response.custom && response.custom.infoList) {
+                        outData = response.custom.infoList;
                     }
 
                     return outData;
