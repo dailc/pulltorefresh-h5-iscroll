@@ -285,7 +285,7 @@
         _dataChangeDefault: function(response) {
             // 数据都使用通用处理方法
             var result = dataProcess(response, {
-                dataPath: ['custom.infoList', 'custom.list', 'UserArea.InfoList']
+                dataPath: ['custom.infolist', 'custom.infoList', 'UserArea.InfoList']
             });
 
             return result.data;
