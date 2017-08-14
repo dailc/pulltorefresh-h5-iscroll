@@ -63,6 +63,13 @@ gulp.task('pack_skin_type4', ['core_concat'], function() {
         .pipe(gulp.dest(debugPath));
 });
 
+// 打包skin-type5
+gulp.task('pack_skin_type5', ['core_concat'], function() {
+    return gulp.src([debugPath + 'pulltorefresh.core.js', './src/pulltorefresh.skin.type5.js'])
+        .pipe(concat('pulltorefresh.skin.type5.js'))
+        .pipe(gulp.dest(debugPath));
+});
+
 // 打包skin-native
 gulp.task('pack_skin_native', function() {
     return gulp.src(['./src/pulltorefresh.skin.native.js'])
@@ -125,7 +132,7 @@ gulp.task('resource_uglify', function() {
         .pipe(gulp.dest(releasePath));
 });
 
-gulp.task('pack_debug', ['pack_skin_default', 'pack_skin_type1', 'pack_skin_type2', 'pack_skin_type3', 'pack_skin_type4', 'pack_skin_native', 'pack_bizlogic_impl', 'pack_bizlogic_impl2', 'pack_resources']);
+gulp.task('pack_debug', ['pack_skin_default', 'pack_skin_type1', 'pack_skin_type2', 'pack_skin_type3', 'pack_skin_type4', 'pack_skin_type5', 'pack_skin_native', 'pack_bizlogic_impl', 'pack_bizlogic_impl2', 'pack_resources']);
 
 
 gulp.task('pack_release', ['js_uglify', 'clean_css', 'resource_uglify']);
