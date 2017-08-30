@@ -32,7 +32,7 @@
 			up: disablePullUp?null:{
 				//是否自动上拉加载-初始化是是否自动
 				auto: isAuto || false,
-
+                isFastLoading: true,
 				callback: pullUpRefreshCallback
 			},
 			scroll: {

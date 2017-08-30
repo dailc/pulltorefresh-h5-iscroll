@@ -1,6 +1,28 @@
 ## H5下拉刷新皮肤系列
 基于`IScroll`的全套下拉刷新皮肤。各式各样的皮肤。以及下拉刷新实现基类供自定义UI实现。
 
+### Notice
+
+这个老版本的已经不再维护了，后续维护新版下拉刷新
+
+地址:
+
+[https://github.com/minirefresh/minirefresh](https://github.com/minirefresh/minirefresh)
+
+特点：
+
+零依赖（原生JS实现，不依赖于任何库）
+
+多主题，官方提供多种主题（包括默认，applet-仿小程序，drawer3d-3d抽屉效果，taobao-仿淘宝等）
+
+易拓展，三层架构，专门抽取UI层面，方便实现各种的主题，实现一套主题非常方便，并且几乎可以实现任何效果
+
+高性能，良好的兼容性。动画采用css3+硬件加速，在大部分手机上都非常流畅，支持和各种Scroll的嵌套（包括mui scroll,IScroll,Swipe等），支持Vue
+
+优雅的API和源码，API设计科学，简单，源码严谨，所有源码通过ESlint检测，并提供完善的showcase和文档
+
+另外，Npm上也有相应发布。
+
 ### Effect(效果)
 
 * 效果1
@@ -155,5 +177,7 @@
     * 下拉刷新`bizlogic`的重构，优化代码
 * 20170814
     * 新增`type5`皮肤，仿照微信小程序的下拉效果
+* 20170830
+    * 这个库已经不再维护，全力维护更好的下拉刷新[minirefresh](https://github.com/minirefresh/minirefresh)
 
 ## License (MIT)
